@@ -1,0 +1,23 @@
+[package]
+authors = ["Ken <kwill1253@gmail.com>"]
+edition = "2018"
+name = "ccount"
+version = "0.1.0"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+wasm-bindgen = "0.2"
+
+[dependencies.web-sys]
+features = [
+  'Document',
+  'Element',
+  'HtmlElement',
+  'Node',
+  'Window',
+]
+version = "0.3.4"
