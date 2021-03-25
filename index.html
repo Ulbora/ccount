@@ -1,7 +1,23 @@
 <html>
 
 <head>
-    <meta content="text/html;charset=utf-8" http-equiv="Content-Type" />
+    <meta charset="utf-8">
+    <title>Calory Counter</title>
+    <meta charset="utf-8" />
+    <meta name="Description" content="A WebAssembly calory counting app written in rust" />
+    <meta name="keywords" content="WebAssembly, rust, C++, iPhone, Android, Mobile">
+    <meta name="author" content="Ken Williamson, Ulbora Labs LLC">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <script type='text/javascript' src="/libs/js/popper.js"></script>
+    <script type='text/javascript' src="/libs/js/jquery-3.5.1.min.js"></script>
+    <script type='text/javascript' src="/libs/js/bootstrap.min.js"></script>
+    <script type='text/javascript' src="/js/custom.js"></script>
+
+    <link rel="stylesheet" href="/libs/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/libs/css/bootstrap-grid.min.css">
+    <link rel="stylesheet" href="/libs/css/bootstrap-reboot.min.css">
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 
 <body>
@@ -14,7 +30,7 @@
         // will "boot" the module and make it ready to use. Currently browsers
         // don't support natively imported WebAssembly as an ES module, but
         // eventually the manual initialization won't be required!
-        import init, { get_calories_by_day } from './ccount.js';
+        import init, { get_calories_by_day, get_food_by_day, login, user_login } from './ccount.js';
 
         async function run() {
             // First up we need to actually load the wasm file, so we use the
@@ -44,16 +60,51 @@
             // exports which is the same as importing the `*_bg` module in other
             // modes
             await init();
+            setCaloriesByDay(get_calories_by_day);
+            setFoodByDay(get_food_by_day);
+            setLogin(login);
+            setLoginUser(user_login);
 
             // And afterwards we can use all the functionality defined in wasm.
             //const result = get_calories_by_day("ken");
+            //get_calories_by_day("ken");
             //console.log(`1 + 2 = ${result}`);
             //if (result !== 3)
             //throw new Error("wasm addition doesn't work!");
+
         }
 
         run();
     </script>
+
+    <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" onclick="getCaloriesByDay()" href="#">
+            <img src="favicon.ico" width="30" height="30" alt="">
+        </a>
+
+        <ul class="nav">
+
+            <li class="nav-item">
+                <a href="#" class="nav-link" style="color: ghostwhite;" onclick="getCalories()"
+                    role="button">Calories</a>
+            </li>
+
+            <li class="nav-item">
+                <a href="#" class="nav-link" style="color: ghostwhite;" onclick="getFoodByDay()">Food</a>
+            </li>
+
+            <li class="nav-item">
+                <a href="#" class="nav-link" style="color: ghostwhite;" onclick="loginScreen()">Login</a>
+            </li>
+
+        </ul>
+
+    </nav>
+
+    <div id="cont">
+
+    </div>
+
 </body>
 
 </html>
