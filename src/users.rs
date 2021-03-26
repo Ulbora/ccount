@@ -1,5 +1,15 @@
+use crate::alert;
 use crate::get_calories_by_day;
+use crate::LOCAL_BASE_URL;
+
+use futures::executor::block_on;
+
 use wasm_bindgen::prelude::*;
+use wasm_bindgen::JsCast;
+
+use crate::services::user_service::login_user;
+
+//use services::user_service::user_login;
 
 #[wasm_bindgen]
 pub fn login() {
@@ -50,8 +60,43 @@ pub fn login() {
 }
 
 #[wasm_bindgen]
-pub fn user_login(email: &str, pw: &str) {
-    get_calories_by_day();
+pub async fn user_login() {
+    //let mut url = String::from(LOCAL_BASE_URL);
+    //url.push_str(&String::from("/user/login"));
+    let window = web_sys::window().expect("no global `window` exists");
+    let document = window.document().expect("should have a document on window");
+    // let email = document.get_element_by_id("email").unwrap();
+    let email = document
+        .get_element_by_id("email")
+        .unwrap()
+        .dyn_into::<web_sys::HtmlInputElement>()
+        .unwrap()
+        .value();
+
+    let pw = document
+        .get_element_by_id("password")
+        .unwrap()
+        .dyn_into::<web_sys::HtmlInputElement>()
+        .unwrap()
+        .value();
+
+    // alert(&email);
+    //alert(&pw);
+    // let email = document
+    //     .get_element_by_id("email")
+    //     .unwrap()
+    //     .dyn_into::<web_sys::HtmlInputElement>().unwrap()
+    //     .value()
+    //     .expect("Could not parse slider value");
+
+    let suc = login_user("http://localhost:3000/user/login", &email, &pw).await;
+    // let suc = login_user("http://localhost:3000/rs/user/login", &email, &pw).await;
+    if suc.success {
+        get_calories_by_day();
+    }
+    //let suc = block_on(suc);
+    //if suc {
+    // }
     // Use `web_sys`'s global `window` function to get a handle on the global
     // window object.
     // let window = web_sys::window().expect("no global `window` exists");

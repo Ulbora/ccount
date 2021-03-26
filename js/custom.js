@@ -34,5 +34,5 @@ var loginUser = function () {
     console.log(email);
     var pw = document.getElementById("password").value;
     console.log(pw);
-    user_login(email, pw);
+    user_login();
 }

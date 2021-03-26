@@ -3,6 +3,10 @@ use wasm_bindgen::prelude::*;
 pub mod services;
 pub mod users;
 
+static LOCAL_BASE_URL: &str = "http://localhost:3000";
+
+static PROD_BASE_URL: &str = "http://ccount.cocka2notes.com";
+
 #[wasm_bindgen]
 extern "C" {
     pub fn alert(s: &str);

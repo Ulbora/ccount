@@ -1,127 +1,85 @@
-extern crate hyper;
-use futures_util::{stream, StreamExt};
-//use hyper::Body;
-//use hyper::Client;
-//use hyper::Method;
-//use hyper::Request;
-//use hyper::Response;
-use hyper::{header, Body, Client, Method, Request, Response, Server, StatusCode};
-type GenericError = Box<dyn std::error::Error + Send + Sync>;
-type Result<T> = std::result::Result<T, GenericError>;
-static POST_DATA: &str = r#"{"email": "tester@test.com", "password": "tester"}"#;
+// use reqwest::blocking::Client;
+use reqwest::Client;
+// use reqwest::StatusCode;
+use serde::{Deserialize, Serialize};
 
-pub async fn login_user(url: &str, email: &str, pw: &str) -> Result<Response<Body>> {
-    let req = Request::builder()
-        .method(Method::POST)
-        .uri(url)
-        .header(header::CONTENT_TYPE, "application/json")
-        .body(POST_DATA.into())
-        .unwrap();
-
-    let client = Client::new();
-    let web_res = client.request(req).await?;
-    // Compare the JSON we sent (before) with what we received (after):
-    let before = stream::once(async {
-        Ok(format!(
-            "<b>POST request body</b>: {}<br><b>Response</b>: ",
-            POST_DATA,
-        )
-        .into())
-    });
-    let after = web_res.into_body();
-    let body = Body::wrap_stream(before.chain(after));
-
-    Ok(Response::new(body))
+#[derive(Debug, Serialize)]
+struct LoginReq {
+    email: String,
+    password: String,
 }
 
-// pub async fn login_user(url: &str, email: &str, pw: &str) -> Result<Response<Body>> {
-//     let req = Request::builder()
-//         .method(Method::POST)
-//         .uri("http://httpbin.org/post")
-//         .header("content-type", "application/json")
-//         .body(Body::from(r#"{"library":"hyper"}"#))
-//         .unwrap();
+#[derive(Debug, Deserialize)]
+pub struct LoginResp {
+    pub success: bool,
+}
 
-//     // let mut rtn = false;
-//     // let req = Request::builder()
-//     //     .method(Method::POST)
-//     //     .uri(url)
-//     //     .header("content-type", "application/json")
-//     //     .body(Body::from(r#"{"email":email, "password": pw}"#))
-//     //     .unwrap();
+pub async fn login_user(url: &str, eemail: &str, pw: &str) -> LoginResp {
+    let rtn = LoginResp { success: false };
+    // let mut rtn = LoginResp { success: true };
 
-//     let client = Client::new();
+    // let mut rtn = false;
 
-//     // POST it...
-//     let resp = client.request(req).await?;
-//     let before = stream::once(async {
-//         Ok(format!(
-//             "<b>POST request body</b>: {}<br><b>Response</b>: ",
-//             POST_DATA,
-//         )
-//         .into())
-//     });
-//     let after = resp.into_body();
-//     let body = Body::wrap_stream(before.chain(after));
+    let em = String::from(eemail);
+    let ppw = String::from(pw);
 
-//     Ok(Response::new(body))
-//     //hyper::body::to_bytes(resp.into_body()).await;
-//     //let resp = client.request(req); //.await.unwrap();
-//     //println!("Response: {}", resp.status());
-//     //let bdy = resp.body();
-//     //let bdy = hyper::body::to_bytes(resp.into_body()).await.unwrap();
+    let req = LoginReq {
+        email: em,
+        password: ppw,
+    };
+    let client = Client::new();
 
-//     // match resp {
-//     //     Ok(r) => {
-//     //         println!("Response: {}", r.status());
-//     //     }
-//     //     Err(_) => {}
-//     // }
+    let resp = client
+        .post(url)
+        .json(&req)
+        //.header("apiKey", "GDG651GFD66FD16151sss651f651ff65555ddfhjklyy5")
+        .send()
+        .await;
 
-//     //rtn
+    match resp {
+        Ok(res) => {
+            if res.status() == 200 {
+                println!("Response! {:?}", res);
+                // let mut jres = LoginResp{};
+                let jresp = res.json::<LoginResp>();
+                return jresp.await.unwrap();
+                // match jresp {
+                //     Ok(jres) => {
+                //         if jres.success {
+                //             rtn = true;
+                //         }
+                //         println!("Response json! {:?}", jres);
+                //     }
+                //     Err(_) => {}
+                // }
+            }
+        }
+        Err(e) => {
+            println!("Request err ! {:?}", e);
+        }
+    }
 
-//     //Ok(())
-// }
+    rtn
+}
 
 #[cfg(test)]
 mod tests {
     use crate::services::user_service::login_user;
-    extern crate futures;
-    extern crate serde;
-    use futures::executor::block_on;
-    use hyper::Body;
-    use tokio::runtime::Runtime;
     #[test]
-    // #[tokio::test]
-
     fn login_a_user() {
         let url = "http://localhost:3000/user/login";
         let email = "tester@test.com";
         let pw = "ken";
-        let mut stat = false;
-        let mut code: hyper::StatusCode;
-        let mut bdy: &Body;
-        let resp = Runtime::new().unwrap().block_on(login_user(url, email, pw));
-        //async {
-        //let resp = login_user(url, email, pw).await;
-        //};
-        match resp {
-            Ok(rp) => {
-                //let status = rp.status;
-                //block_on(rp);
-                bdy = rp.body();
-                stat = rp.status().is_success();
-                code = rp.status();
+        let res = login_user(url, email, pw);
+        assert!(res == false)
+    }
 
-                //let body = serde_json::from_slice(&bdy).unwrap();
-            }
-            Err(_) => {}
-        }
-        assert!(stat == true);
-        //};
-        //blocking_task.await.unwrap();
-
-        // let expected = Ok(2);
-        //assert_eq!(future.wait(), expected);
+    #[test]
+    fn login_a_user_suc() {
+        let url = "http://localhost:3000/user/login";
+        let email = "ken5@ken.com";
+        let pw = "ken5";
+        let res = login_user(url, email, pw);
+        assert!(res == true)
     }
 }
