@@ -2,6 +2,7 @@ use wasm_bindgen::prelude::*;
 
 pub mod services;
 pub mod users;
+pub mod food;
 
 // static LOCAL_BASE_URL: &str = "http://localhost:3000";
 
