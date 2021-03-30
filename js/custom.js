@@ -77,6 +77,7 @@ var loginScreen = function () {
     login();
 }
 
+//login
 var user_login;
 var setLoginUser = function (fn) {
     user_login = fn;
@@ -88,4 +89,15 @@ var loginUser = function () {
     var pw = document.getElementById("password").value;
     console.log(pw);
     user_login();
+}
+
+//change pw
+
+var change_pw_screen;
+var setChangePwScreen = function (fn) {
+    change_pw_screen = fn;
+}
+
+var changePwScreen = function () {
+    change_pw_screen();
 }
