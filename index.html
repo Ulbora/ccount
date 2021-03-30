@@ -30,7 +30,10 @@
         // will "boot" the module and make it ready to use. Currently browsers
         // don't support natively imported WebAssembly as an ES module, but
         // eventually the manual initialization won't be required!
-        import init, { get_calories_by_day, get_food_by_day, login, user_login, change_pw_screen } from './ccount.js';
+        import init, {
+            get_calories_by_day, get_food_by_day, login, user_login,
+            change_pw_screen, change_pw, register_screen, register
+        } from './ccount.js';
 
         async function run() {
             // First up we need to actually load the wasm file, so we use the
@@ -65,6 +68,9 @@
             setLogin(login);
             setLoginUser(user_login);
             setChangePwScreen(change_pw_screen);
+            setChangePw(change_pw);
+            setRegisterScreen(register_screen);
+            setRegister(register);
 
             // And afterwards we can use all the functionality defined in wasm.
             //const result = get_calories_by_day("ken");

@@ -25,7 +25,17 @@ extern "C" {
 
 #[wasm_bindgen]
 extern "C" {
+    pub fn getUserEmail() -> String;
+}
+
+#[wasm_bindgen]
+extern "C" {
     pub fn setUserPw(s: &str);
+}
+
+#[wasm_bindgen]
+extern "C" {
+    pub fn getUserPw() -> String;
 }
 
 #[wasm_bindgen]

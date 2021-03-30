@@ -101,3 +101,44 @@ var setChangePwScreen = function (fn) {
 var changePwScreen = function () {
     change_pw_screen();
 }
+
+
+
+//change pw
+
+var change_pw;
+var setChangePw = function (fn) {
+    change_pw = fn;
+}
+
+var changePassword = function () {
+    change_pw();
+}
+
+
+
+
+
+//register
+
+var register_screen;
+var setRegisterScreen = function (fn) {
+    register_screen = fn;
+}
+
+var registerScreen = function () {
+    register_screen();
+}
+
+
+
+//change pw
+
+var register;
+var setRegister = function (fn) {
+    register = fn;
+}
+
+var registerUser = function () {
+    register();
+}
