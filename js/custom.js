@@ -132,7 +132,7 @@ var registerScreen = function () {
 
 
 
-//change pw
+//register
 
 var register;
 var setRegister = function (fn) {
@@ -141,4 +141,17 @@ var setRegister = function (fn) {
 
 var registerUser = function () {
     register();
+}
+
+
+
+//register
+
+var food_screen;
+var setFoodScreen = function (fn) {
+    food_screen = fn;
+}
+
+var foodScreen = function () {
+    food_screen();
 }
