@@ -32,7 +32,8 @@
         // eventually the manual initialization won't be required!
         import init, {
             get_calories_by_day, get_food_by_day, login, user_login,
-            change_pw_screen, change_pw, register_screen, register, food_screen
+            change_pw_screen, change_pw, register_screen, register, food_screen,
+            new_food
         } from './ccount.js';
 
         async function run() {
@@ -72,6 +73,7 @@
             setRegisterScreen(register_screen);
             setRegister(register);
             setFoodScreen(food_screen);
+            setNewFood(new_food);
 
             // And afterwards we can use all the functionality defined in wasm.
             //const result = get_calories_by_day("ken");

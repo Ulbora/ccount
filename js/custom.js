@@ -155,3 +155,16 @@ var setFoodScreen = function (fn) {
 var foodScreen = function () {
     food_screen();
 }
+
+
+
+//new food
+
+var new_food;
+var setNewFood = function (fn) {
+    new_food = fn;
+}
+
+var addFood = function () {
+    new_food();
+}

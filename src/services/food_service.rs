@@ -176,6 +176,53 @@ pub async fn get_food_list(url: &str, eemail: &str, pw: &str, cat_id: i64) -> Ve
     rtn
 }
 
+pub async fn get_food_list_by_user(url: &str, eemail: &str, pw: &str) -> Vec<Food> {
+    let rtn: Vec<Food> = Vec::new();
+    let client = Client::new();
+
+    let mut creds = String::from(eemail);
+    creds.push_str(":");
+    creds.push_str(pw);
+
+    let b64creds = &base64::encode(&creds.as_bytes());
+    let mut nurl = String::from(url);
+    nurl.push_str("/");
+    nurl.push_str(eemail);
+
+    let resp = client
+        .get(nurl)
+        //.json(&req)
+        //.header("apiKey", "GDG651GFD66FD16151sss651f651ff65555ddfhjklyy5")
+        .header("Authorization", b64creds)
+        .send()
+        .await;
+
+    match resp {
+        Ok(res) => {
+            if res.status() == 200 {
+                println!("Category Response! {:?}", res);
+                // let mut jres = LoginResp{};
+                let jresp = res.json::<Vec<Food>>();
+                return jresp.await.unwrap();
+                // match jresp {
+                //     Ok(jres) => {
+                //         if jres.success {
+                //             rtn = true;
+                //         }
+                //         println!("Response json! {:?}", jres);
+                //     }
+                //     Err(_) => {}
+                // }
+            }
+        }
+        Err(e) => {
+            println!("Category Request err ! {:?}", e);
+        }
+    }
+
+    rtn
+}
+
 pub async fn delete_food(url: &str, eemail: &str, pw: &str, id: i64) -> LoginResp {
     let rtn = LoginResp { success: false };
     let client = Client::new();
@@ -231,6 +278,7 @@ mod tests {
     use crate::services::food_service::db_update_food;
     use crate::services::food_service::delete_food;
     use crate::services::food_service::get_food_list;
+    use crate::services::food_service::get_food_list_by_user;
     use crate::services::food_service::Food;
     use crate::services::food_service::NewFood;
 
@@ -275,6 +323,17 @@ mod tests {
         let email = "ken20@ken.com";
         let pw = "ken";
         let resp = get_food_list(url, email, pw, 232);
+        let res = tokio_test::block_on(resp);
+
+        assert!(res.len() != 0)
+    }
+
+    #[test]
+    fn fd_list_by_use() {
+        let url = "http://localhost:3000/food/list";
+        let email = "ken20@ken.com";
+        let pw = "ken";
+        let resp = get_food_list_by_user(url, email, pw);
         let res = tokio_test::block_on(resp);
 
         assert!(res.len() != 0)
