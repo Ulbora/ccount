@@ -69,12 +69,16 @@ pub async fn food_screen() {
         "<input type=\"text\" class=\"form-control\" id=\"food\" placeholder=\"steak 10oz\">",
     );
     html.push_str("</div>");
+    html.push_str("<div class=\"form-group\">");
+    html.push_str("<label for=\"cals\">Calories</label>");
+    html.push_str("<input type=\"text\" class=\"form-control\" id=\"cals\" placeholder=\"344\">");
+    html.push_str("</div>");
     html.push_str("<button onclick=\"addFood();\" class=\"btn btn-primary\">Add</button>");
     html.push_str("</form>");
     html.push_str("</div>");
 
     html.push_str("<h2>Existing Foods</h2>");
-    html.push_str("<table class=\"table table-hover\">");
+    html.push_str("<table class=\"table table-hover mb-5\">");
     html.push_str("<thead>");
     html.push_str("<tr>");
     html.push_str("<th scope=\"col\">Food</th>");
@@ -139,20 +143,29 @@ pub async fn new_food() {
 
     let cat_id = catval.parse::<i64>().unwrap();
 
+    let cals = document
+        .get_element_by_id("cals")
+        .unwrap()
+        .dyn_into::<web_sys::HtmlInputElement>()
+        .unwrap()
+        .value();
+
+    let calsint = catval.parse::<i32>().unwrap();
+
     //alert(&catval);
     let uemail = getUserEmail();
     let epw = getUserPw();
     let req = NewFood {
         name: food,
         category_id: cat_id,
-        calories: 12,
+        calories: calsint,
         user_email: uemail,
     };
     let uemail = getUserEmail();
     let res = db_new_food(&url, &uemail, &epw, &req).await;
 
     if res.success {
-        get_calories_by_day();
+        food_screen().await;
     } else {
         food_screen().await;
     }
