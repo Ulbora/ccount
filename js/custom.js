@@ -211,3 +211,16 @@ var updateFood = function () {
     update_food();
 }
 
+
+
+
+//new food
+
+var food_calory_screen;
+var setAddCalories = function (fn) {
+    food_calory_screen = fn;
+}
+
+var addCaloriesScreen = function () {
+    food_calory_screen();
+}
