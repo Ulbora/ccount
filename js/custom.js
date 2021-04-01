@@ -168,3 +168,46 @@ var setNewFood = function (fn) {
 var addFood = function () {
     new_food();
 }
+
+
+// food item
+
+var food_item_screen;
+var setFoodItemScreen = function (fn) {
+    food_item_screen = fn;
+}
+
+var savedFoodId;
+var savedFoodName;
+var sevedFoodCals;
+var foodItemScreen = function (id, name, cals) {
+    savedFoodId = id;
+    savedFoodName = name;
+    sevedFoodCals = cals;
+    food_item_screen();
+}
+
+var getSavedFoodId = function () {
+    return savedFoodId;
+}
+
+var getSavedFoodName = function () {
+    return savedFoodName;
+}
+
+var getSevedFoodCals = function () {
+    return sevedFoodCals;
+}
+
+
+//update food
+
+var update_food;
+var setFoodUpdate = function (fn) {
+    update_food = fn;
+}
+
+var updateFood = function () {
+    update_food();
+}
+
