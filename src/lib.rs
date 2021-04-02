@@ -1,8 +1,9 @@
 use wasm_bindgen::prelude::*;
 
+pub mod calories;
+pub mod food;
 pub mod services;
 pub mod users;
-pub mod food;
 
 // static LOCAL_BASE_URL: &str = "http://localhost:3000";
 
@@ -39,19 +40,15 @@ extern "C" {
     pub fn getUserPw() -> String;
 }
 
-
 #[wasm_bindgen]
 extern "C" {
     pub fn getSavedFoodId() -> String;
 }
 
-
-
 #[wasm_bindgen]
 extern "C" {
     pub fn getSavedFoodName() -> String;
 }
-
 
 #[wasm_bindgen]
 extern "C" {
