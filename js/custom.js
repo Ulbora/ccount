@@ -63,6 +63,8 @@ var setCatValue = function (val) {
     calCatValue = val;
 }
 
+
+
 var getCatValue = function () {
     return calCatValue;
 }
@@ -214,6 +216,14 @@ var getSevedFoodCals = function () {
     return sevedFoodCals;
 }
 
+var deleteFood = function () {
+    var r = confirm("Delete this Food?");
+    if (r == true) {
+        // txt = "You pressed OK!";
+        deleteExistingFood();
+    }
+}
+
 
 //update food
 
@@ -238,4 +248,17 @@ var setAddCalories = function (fn) {
 
 var addCaloriesScreen = function () {
     food_calory_screen();
+}
+
+
+
+//new food
+
+var del_food;
+var setDeleteFood = function (fn) {
+    del_food = fn;
+}
+
+var deleteExistingFood = function () {
+    del_food();
 }

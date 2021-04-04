@@ -8,6 +8,7 @@ use crate::get_calories_by_day;
 use crate::services::category_service::get_category_list;
 use crate::services::food_service::db_new_food;
 use crate::services::food_service::db_update_food;
+use crate::services::food_service::delete_food;
 use crate::services::food_service::get_food_list_by_user;
 use crate::services::food_service::Food;
 use crate::services::food_service::NewFood;
@@ -150,7 +151,7 @@ pub async fn new_food() {
         .unwrap()
         .value();
 
-    let cat_id = catval.parse::<i64>().unwrap();
+    //let cat_id = catval.parse::<i64>().unwrap();
 
     let cals = document
         .get_element_by_id("cals")
@@ -196,6 +197,9 @@ pub async fn food_item_screen() {
 
     let mut html = String::from("<div id=\"foodItemScreen\" class=\"container-sm mt-5\">");
     html.push_str("<div class=\"shadow-none p-3 mb-5 mt-5 rounded\">");
+    html.push_str(
+        "<button onclick=\"deleteFood();\" class=\"btn btn-danger mb-2\">Delete</button>",
+    );
     html.push_str("<h1>Food</h1>");
     html.push_str("<form>");
     html.push_str("<input type=\"hidden\" class=\"form-control\" id=\"fid\" value=\"");
@@ -270,21 +274,47 @@ pub async fn update_food() {
         .unwrap()
         .value();
 
-    let calsint = cals.parse::<i32>().unwrap();
+    if !food.eq("") && !cals.eq("") {
+        let calsint = cals.parse::<i32>().unwrap();
+        //alert(&catval);
+        let uemail = getUserEmail();
+        let epw = getUserPw();
+        let req = Food {
+            id: fid,
+            name: food,
+            category_id: 0,
+            calories: calsint,
+            user_email: uemail,
+        };
+        let uemail = getUserEmail();
+        let res = db_update_food(&url, &uemail, &epw, &req).await;
 
-    //alert(&catval);
+        if res.success {
+            food_screen().await;
+        } else {
+            alert("Food update error!");
+            food_screen().await;
+        }
+    } else {
+        food_screen().await;
+    }
+}
+
+#[wasm_bindgen]
+pub async fn del_food() {
+    let fid = getSavedFoodId();
     let uemail = getUserEmail();
     let epw = getUserPw();
-    let req = Food {
-        id: fid,
-        name: food,
-        category_id: 0,
-        calories: calsint,
-        user_email: uemail,
-    };
-    let uemail = getUserEmail();
-    let res = db_update_food(&url, &uemail, &epw, &req).await;
+    let pa = is_prod_alive(&PROD_TEST_URL).await;
+    let mut url = String::from(LOCAL_BASE_URL);
+    if pa.success {
+        url = String::from(PROD_BASE_URL);
+    }
+    url.push_str(&String::from("/food"));
 
+    let fidint = fid.parse::<i64>().unwrap();
+
+    let res = delete_food(&url, &uemail, &epw, fidint).await;
     if res.success {
         food_screen().await;
     } else {
