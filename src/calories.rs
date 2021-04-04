@@ -1,3 +1,6 @@
+use crate::alert;
+use crate::getCalDateValue;
+use crate::getCatValue;
 use crate::getUserEmail;
 use crate::getUserPw;
 use crate::services::category_service::get_category_list;
@@ -6,6 +9,7 @@ use crate::services::user_service::is_prod_alive;
 use crate::LOCAL_BASE_URL;
 use crate::PROD_BASE_URL;
 use crate::PROD_TEST_URL;
+use js_sys::*;
 use std::collections::HashMap;
 use wasm_bindgen::prelude::*;
 use wasm_bindgen::JsCast;
@@ -15,15 +19,53 @@ pub async fn food_calory_screen() {
     let pa = is_prod_alive(&PROD_TEST_URL).await;
     let mut url = String::from(LOCAL_BASE_URL);
     let mut fdurl = String::from(LOCAL_BASE_URL);
+    let mut caurl = String::from(LOCAL_BASE_URL);
     if pa.success {
         url = String::from(PROD_BASE_URL);
         fdurl = String::from(PROD_BASE_URL);
+        caurl = String::from(PROD_BASE_URL);
     }
     url.push_str(&String::from("/category/list"));
     fdurl.push_str(&String::from("/food/list"));
+    caurl.push_str(&String::from("/calory/list"));
 
     let uemail = getUserEmail();
     let epw = getUserPw();
+
+    let mut cal_date = getCalDateValue();
+    let cat_val = getCatValue();
+
+    let mut seldate = String::new();
+
+    if cal_date.eq("") {
+        //// let mut ndt = "";
+        //
+        let now = js_sys::Date::now();
+        let dt = js_sys::Date::new(&JsValue::from_f64(now));
+        //let dt = chrono::offset::Local::now();
+        let m = dt.get_month();
+        let d = dt.get_date();
+        let y = dt.get_full_year();
+        let mut ms = (m + 1).to_string();
+        if ms.len() < 2 {
+            ms = String::from("0");
+            ms.push_str(&(m + 1).to_string());
+        }
+        let mut ds = d.to_string();
+        if ds.len() < 2 {
+            ds = String::from("0");
+            ds.push_str(&d.to_string());
+        }
+        let ys = y.to_string();
+        // //let m = dt.
+        let mut today = String::new();
+        today.push_str(&ys);
+        today.push_str("-");
+        today.push_str(&ms);
+        today.push_str("-");
+        today.push_str(&ds);
+        seldate = today;
+    }
 
     let cat_list = get_category_list(&url, &uemail, &epw).await;
     let fd_list = get_food_list_by_user(&fdurl, &uemail, &epw).await;
@@ -48,15 +90,20 @@ pub async fn food_calory_screen() {
     html.push_str("<form>");
     html.push_str("<div class=\"form-row\">");
     html.push_str("<div class=\"form-group col-md-3\">");
-    html.push_str("<label >Day</label>");
-    html.push_str("<input id=\"day\" class=\"form-control\" type=\"date\">");
+    html.push_str("<label>Day</label>");
+    html.push_str("<input id=\"day\" class=\"form-control\" type=\"date\" ");
+    html.push_str("value=\"");
+    //html.push_str("2021-4-3");
+    html.push_str(&seldate);
+    // alert(&seldate);
+    html.push_str("\" required pattern=\"\\d{2}-\\d{2}-\\d{4}\">");
+    //html.push_str("<input id=\"day\" class=\"form-control\" type=\"date\">");
     html.push_str("</div>");
     html.push_str("</div>");
-    // html.push_str("<div class=\"form-group\">");
-    //html.push_str("</div>");
     html.push_str("<div class=\"form-group\">");
     html.push_str("<label for=\"cat\">Category</label>");
     html.push_str("<select class=\"form-control\" id=\"cat\">");
+    html.push_str("<option>Select Category</option>");
     for c in cat_list {
         html.push_str("<option value=\"");
         html.push_str(&c.id.to_string());
@@ -67,21 +114,13 @@ pub async fn food_calory_screen() {
     }
     html.push_str("</select>");
     html.push_str("</div>");
-    html.push_str("<div class=\"form-group\">");
-    html.push_str("<label for=\"food\">Food</label>");
     html.push_str(
-        "<input type=\"text\" class=\"form-control\" id=\"food\" placeholder=\"steak 10oz\">",
+        "<button onclick=\"addCaloryScreen();\" class=\"btn btn-primary\">Add Calories</button>",
     );
-    html.push_str("</div>");
-    html.push_str("<div class=\"form-group\">");
-    html.push_str("<label for=\"cals\">Calories</label>");
-    html.push_str("<input type=\"text\" class=\"form-control\" id=\"cals\" placeholder=\"344\">");
-    html.push_str("</div>");
-    html.push_str("<button onclick=\"addFood();\" class=\"btn btn-primary\">Add</button>");
     html.push_str("</form>");
     html.push_str("</div>");
 
-    html.push_str("<h2>Existing Foods</h2>");
+    html.push_str("<h2>Existing Calories</h2>");
     html.push_str("<table class=\"table table-hover mb-5\">");
     html.push_str("<thead>");
     html.push_str("<tr>");

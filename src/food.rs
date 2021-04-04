@@ -76,7 +76,7 @@ pub async fn food_screen() {
     html.push_str("</div>");
     html.push_str("<div class=\"form-group\">");
     html.push_str("<label for=\"cals\">Calories</label>");
-    html.push_str("<input type=\"text\" class=\"form-control\" id=\"cals\" placeholder=\"344\">");
+    html.push_str("<input type=\"number\" class=\"form-control\" id=\"cals\" placeholder=\"344\">");
     html.push_str("</div>");
     html.push_str("<button onclick=\"addFood();\" class=\"btn btn-primary\">Add</button>");
     html.push_str("</form>");
@@ -159,25 +159,26 @@ pub async fn new_food() {
         .unwrap()
         .value();
 
-    let calsint = cals.parse::<i32>().unwrap();
-
-    //alert(&catval);
-    let uemail = getUserEmail();
-    let epw = getUserPw();
-    let req = NewFood {
-        name: food,
-        category_id: cat_id,
-        calories: calsint,
-        user_email: uemail,
-    };
-    let uemail = getUserEmail();
-    let res = db_new_food(&url, &uemail, &epw, &req).await;
-
-    if res.success {
-        food_screen().await;
-    } else {
-        alert("Food add error!");
-        food_screen().await;
+    if !food.eq("") && !catval.eq("") && !cals.eq("") {
+        let cat_id = catval.parse::<i64>().unwrap();
+        let calsint = cals.parse::<i32>().unwrap();
+        //alert(&catval);
+        let uemail = getUserEmail();
+        let epw = getUserPw();
+        let req = NewFood {
+            name: food,
+            category_id: cat_id,
+            calories: calsint,
+            user_email: uemail,
+        };
+        let uemail = getUserEmail();
+        let res = db_new_food(&url, &uemail, &epw, &req).await;
+        if res.success {
+            food_screen().await;
+        } else {
+            alert("Food add error!");
+            food_screen().await;
+        }
     }
 }
 

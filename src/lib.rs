@@ -56,6 +56,26 @@ extern "C" {
 }
 
 #[wasm_bindgen]
+extern "C" {
+    pub fn setCaloryDateValue(s: &str);
+}
+
+#[wasm_bindgen]
+extern "C" {
+    pub fn getCalDateValue() -> String;
+}
+
+#[wasm_bindgen]
+extern "C" {
+    pub fn setCatValue(s: &str);
+}
+
+#[wasm_bindgen]
+extern "C" {
+    pub fn getCatValue() -> String;
+}
+
+#[wasm_bindgen]
 pub fn get_calories_by_day() {
     // Use `web_sys`'s global `window` function to get a handle on the global
     // window object.

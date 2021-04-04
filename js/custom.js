@@ -1,35 +1,4 @@
-//import { get_calories_by_day } from "./get_calories_by_day";
-// $(document).ready(function () {
-//     // $(function () {
-//     //     $('.datepicker').datepicker({
-//     //         format: 'mm-dd-yyyy',
-//     //         autoclose: true
-//     //     });
-//     // });
-//     $('[data-toggle="datepicker"]').datepicker();
-// });
 
-// $(function () {
-//     // var $startDate = $('.start-date');
-//     // var $endDate = $('.end-date');
-
-//     // $startDate.datepicker({
-//     //     autoHide: true,
-//     // });
-//     // $endDate.datepicker({
-//     //     autoHide: true,
-//     //     startDate: $startDate.datepicker('getDate'),
-//     // });
-
-//     // $startDate.on('change', function () {
-//     //     $endDate.datepicker('setStartDate', $startDate.datepicker('getDate'));
-//     // });
-//     $('[data-toggle="datepicker"]').datepicker();
-
-//     $().datepicker({
-//         date: new Date(2014, 1, 14) // Or '02/14/2014'
-//     });
-// });
 
 var getUserEmail = function () {
     var rtn = "";
@@ -81,6 +50,22 @@ var setUserPw = function (val) {
     document.cookie = "pw" + "=" + val + ";" + expires + ";path=/";
 }
 
+var calDateValue = "";
+var setCaloryDateValue = function (val) {
+    calDateValue = val;
+}
+var getCalDateValue = function () {
+    return calDateValue;
+}
+
+var calCatValue = "";
+var setCatValue = function (val) {
+    calCatValue = val;
+}
+
+var getCatValue = function () {
+    return calCatValue;
+}
 
 var get_calories_by_day;
 var setCaloriesByDay = function (fn) {
