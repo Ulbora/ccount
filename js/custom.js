@@ -176,7 +176,6 @@ var foodScreen = function () {
 
 
 //new food
-
 var new_food;
 var setNewFood = function (fn) {
     new_food = fn;
@@ -261,4 +260,15 @@ var setDeleteFood = function (fn) {
 
 var deleteExistingFood = function () {
     del_food();
+}
+
+
+// //new food
+var add_calory_screen;
+var setAddCaloryScreen = function (fn) {
+    add_calory_screen = fn;
+}
+
+var addCaloriesByCategoryScreen = function () {
+    add_calory_screen();
 }

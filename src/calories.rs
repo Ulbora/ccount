@@ -4,6 +4,7 @@ use crate::getCatValue;
 use crate::getUserEmail;
 use crate::getUserPw;
 use crate::services::category_service::get_category_list;
+use crate::services::food_service::get_food_list;
 use crate::services::food_service::get_food_list_by_user;
 use crate::services::user_service::is_prod_alive;
 use crate::LOCAL_BASE_URL;
@@ -32,7 +33,7 @@ pub async fn food_calory_screen() {
     let uemail = getUserEmail();
     let epw = getUserPw();
 
-    let mut cal_date = getCalDateValue();
+    let cal_date = getCalDateValue();
     let cat_val = getCatValue();
 
     let mut seldate = String::new();
@@ -103,7 +104,7 @@ pub async fn food_calory_screen() {
     html.push_str("<div class=\"form-group\">");
     html.push_str("<label for=\"cat\">Category</label>");
     html.push_str("<select class=\"form-control\" id=\"cat\">");
-    html.push_str("<option>Select Category</option>");
+    html.push_str("<option value=\"0\">Select Category</option>");
     for c in cat_list {
         html.push_str("<option value=\"");
         html.push_str(&c.id.to_string());
@@ -115,43 +116,43 @@ pub async fn food_calory_screen() {
     html.push_str("</select>");
     html.push_str("</div>");
     html.push_str(
-        "<button onclick=\"addCaloryScreen();\" class=\"btn btn-primary\">Add Calories</button>",
+        "<button onclick=\"addCaloriesByCategoryScreen();\" class=\"btn btn-primary\">Add Calories</button>",
     );
     html.push_str("</form>");
     html.push_str("</div>");
 
-    html.push_str("<h2>Existing Calories</h2>");
-    html.push_str("<table class=\"table table-hover mb-5\">");
-    html.push_str("<thead>");
-    html.push_str("<tr>");
-    html.push_str("<th scope=\"col\">Food</th>");
-    html.push_str("<th scope=\"col\">Calories</th>");
-    html.push_str("<th scope=\"col\">Category</th>");
-    html.push_str("</tr>");
-    html.push_str("</thead>");
-    html.push_str("<tbody>");
-    for f in fd_list {
-        html.push_str("<tr class='clickable-row' onclick=\"foodItemScreen('");
-        html.push_str(&f.id.to_string());
-        html.push_str("','");
-        html.push_str(&f.name);
-        html.push_str("','");
-        html.push_str(&f.calories.to_string());
-        html.push_str("');\">");
-        html.push_str("<td>");
-        html.push_str(&f.name);
-        html.push_str("</td>");
-        html.push_str("<td>");
-        html.push_str(&f.calories.to_string());
-        html.push_str("</td>");
+    // html.push_str("<h2>Existing Calories</h2>");
+    // html.push_str("<table class=\"table table-hover mb-5\">");
+    // html.push_str("<thead>");
+    // html.push_str("<tr>");
+    // html.push_str("<th scope=\"col\">Food</th>");
+    // html.push_str("<th scope=\"col\">Calories</th>");
+    // html.push_str("<th scope=\"col\">Category</th>");
+    // html.push_str("</tr>");
+    // html.push_str("</thead>");
+    // html.push_str("<tbody>");
+    // for f in fd_list {
+    //     html.push_str("<tr class='clickable-row' onclick=\"foodItemScreen('");
+    //     html.push_str(&f.id.to_string());
+    //     html.push_str("','");
+    //     html.push_str(&f.name);
+    //     html.push_str("','");
+    //     html.push_str(&f.calories.to_string());
+    //     html.push_str("');\">");
+    //     html.push_str("<td>");
+    //     html.push_str(&f.name);
+    //     html.push_str("</td>");
+    //     html.push_str("<td>");
+    //     html.push_str(&f.calories.to_string());
+    //     html.push_str("</td>");
 
-        html.push_str("<td>");
-        html.push_str(&cmap[&f.category_id]);
-        html.push_str("</td>");
-        html.push_str("</tr>");
-    }
-    html.push_str("</tbody>");
-    html.push_str("</table>");
+    //     html.push_str("<td>");
+    //     html.push_str(&cmap[&f.category_id]);
+    //     html.push_str("</td>");
+    //     html.push_str("</tr>");
+    // }
+    // html.push_str("</tbody>");
+    // html.push_str("</table>");
     html.push_str("</div>");
 
     val.set_inner_html(&html);
@@ -159,4 +160,146 @@ pub async fn food_calory_screen() {
     //val.set_inner_html("<div style=\"margin: 5% 0 0 0;\">test</div>");
 
     body.append_child(&val).unwrap();
+}
+
+#[wasm_bindgen]
+pub async fn add_calory_screen() {
+    let cal_date = getCalDateValue();
+    let cat_val = getCatValue();
+
+    let uemail = getUserEmail();
+    let epw = getUserPw();
+
+    let pa = is_prod_alive(&PROD_TEST_URL).await;
+    let mut url = String::from(LOCAL_BASE_URL);
+    let mut fdurl = String::from(LOCAL_BASE_URL);
+    let mut caurl = String::from(LOCAL_BASE_URL);
+    if pa.success {
+        url = String::from(PROD_BASE_URL);
+        fdurl = String::from(PROD_BASE_URL);
+        caurl = String::from(PROD_BASE_URL);
+    }
+    url.push_str(&String::from("/category/list"));
+    fdurl.push_str(&String::from("/food/list"));
+    caurl.push_str(&String::from("/calory/list"));
+
+    let window = web_sys::window().expect("no global `window` exists");
+    let document = window.document().expect("should have a document on window");
+    let body = document.body().expect("document should have a body");
+
+    // Manufacture the element we're gonna append
+    // let val = document.create_element("p").unwrap();
+    let val = document.get_element_by_id("cont").unwrap();
+
+    let catval = document
+        .get_element_by_id("cat")
+        .unwrap()
+        .dyn_into::<web_sys::HtmlSelectElement>()
+        .unwrap()
+        .value();
+
+    let dt = document
+        .get_element_by_id("day")
+        .unwrap()
+        .dyn_into::<web_sys::HtmlInputElement>()
+        .unwrap()
+        .value();
+
+    if !catval.eq("0") && !dt.eq("") {
+        let mut cat_disp = String::new();
+        let cat_id = catval.parse::<i64>().unwrap();
+
+        let cat_list = get_category_list(&url, &uemail, &epw).await;
+        let fd_list = get_food_list(&fdurl, &uemail, &epw, cat_id).await;
+
+        // let cal_list =
+
+        for c in cat_list {
+            if c.id == cat_id {
+                cat_disp = c.name;
+            }
+        }
+
+        // alert(&catval);
+        // alert(&cat_disp);
+        // alert(&dt);
+        let mut html = String::from("<div id=\"selectFoodScreen\" class=\"container-sm mt-5\">");
+        html.push_str("<h2>Add Calories</h2>");
+        html.push_str("<h6>Category: ");
+        html.push_str(&cat_disp);
+        html.push_str("</h6>");
+        html.push_str("<table class=\"table table-hover mb-5\">");
+        html.push_str("<thead>");
+        html.push_str("<tr>");
+        html.push_str("<th scope=\"col\">Food</th>");
+        html.push_str("<th scope=\"col\">Calories</th>");
+        html.push_str("<th scope=\"col\"></th>");
+        html.push_str("<th scope=\"col\"></th>");
+        html.push_str("</tr>");
+        html.push_str("</thead>");
+        html.push_str("<tbody>");
+        for f in fd_list {
+            html.push_str("<tr class='clickable-row' onclick=\"foodItemScreen('");
+            html.push_str(&f.id.to_string());
+            html.push_str("','");
+            html.push_str(&f.name);
+            html.push_str("','");
+            html.push_str(&f.calories.to_string());
+            html.push_str("');\">");
+            html.push_str("<td>");
+            html.push_str(&f.name);
+            html.push_str("</td>");
+            html.push_str("<td>");
+            html.push_str(&f.calories.to_string());
+            html.push_str("</td>");
+
+            html.push_str("<td>");
+            //html.push_str(&cmap[&f.category_id]);
+            html.push_str("</td>");
+
+            html.push_str("<td>");
+            //html.push_str(&cmap[&f.category_id]);
+            html.push_str("</td>");
+            html.push_str("</tr>");
+        }
+        html.push_str("</tbody>");
+        html.push_str("</table>");
+        html.push_str("</div>");
+
+        // html.push_str("<h2 class=\"mt-5;\"">Existing Calories</h2>");
+        // html.push_str("<table class=\"table table-hover mb-5\">");
+        // html.push_str("<thead>");
+        // html.push_str("<tr>");
+        // html.push_str("<th scope=\"col\">Food</th>");
+        // html.push_str("<th scope=\"col\">Calories</th>");
+        // html.push_str("<th scope=\"col\">Category</th>");
+        // html.push_str("</tr>");
+        // html.push_str("</thead>");
+        // html.push_str("<tbody>");
+        // for f in fd_list {
+        //     html.push_str("<tr class='clickable-row' onclick=\"foodItemScreen('");
+        //     html.push_str(&f.id.to_string());
+        //     html.push_str("','");
+        //     html.push_str(&f.name);
+        //     html.push_str("','");
+        //     html.push_str(&f.calories.to_string());
+        //     html.push_str("');\">");
+        //     html.push_str("<td>");
+        //     html.push_str(&f.name);
+        //     html.push_str("</td>");
+        //     html.push_str("<td>");
+        //     html.push_str(&f.calories.to_string());
+        //     html.push_str("</td>");
+
+        //     html.push_str("<td>");
+        //     html.push_str(&cmap[&f.category_id]);
+        //     html.push_str("</td>");
+        //     html.push_str("</tr>");
+        // }
+        // html.push_str("</tbody>");
+        // html.push_str("</table>");
+        val.set_inner_html(&html);
+
+        body.append_child(&val).unwrap();
+    }
 }
