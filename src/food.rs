@@ -22,6 +22,7 @@ use wasm_bindgen::JsCast;
 
 #[wasm_bindgen]
 pub async fn food_screen() {
+    // alert("in food_screen");
     let pa = is_prod_alive(&PROD_TEST_URL).await;
     let mut url = String::from(LOCAL_BASE_URL);
     let mut fdurl = String::from(LOCAL_BASE_URL);
@@ -185,6 +186,7 @@ pub async fn new_food() {
 
 #[wasm_bindgen]
 pub async fn food_item_screen() {
+    // alert("in food_item_screen");
     let fid = getSavedFoodId();
     let fname = getSavedFoodName();
     let fcals = getSevedFoodCals();

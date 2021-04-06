@@ -87,12 +87,32 @@ extern "C" {
 
 #[wasm_bindgen]
 extern "C" {
+    pub fn setCaloriesAddDate(s: &str);
+}
+
+#[wasm_bindgen]
+extern "C" {
     pub fn setAddCaloryCatValue(s: &str);
 }
 
 #[wasm_bindgen]
 extern "C" {
     pub fn getCaloryCatValue() -> String;
+}
+
+#[wasm_bindgen]
+extern "C" {
+    pub fn getCalariesIdToRem() -> String;
+}
+
+#[wasm_bindgen]
+extern "C" {
+    pub fn getCalariesRemDate() -> String;
+}
+
+#[wasm_bindgen]
+extern "C" {
+    pub fn setCaloriesRemDate(s: &str);
 }
 
 #[wasm_bindgen]

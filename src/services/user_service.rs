@@ -1,4 +1,5 @@
 extern crate base64;
+use crate::alert;
 use reqwest::Client;
 
 use serde::{Deserialize, Serialize};
@@ -45,7 +46,6 @@ pub async fn is_prod_alive(url: &str) -> LoginResp {
         // )
         .send()
         .await;
-
     match resp {
         Ok(res) => {
             if res.status() == 401 {
@@ -70,6 +70,7 @@ pub async fn is_prod_alive(url: &str) -> LoginResp {
             }
         }
         Err(e) => {
+            //alert(&e.to_string());
             println!("Request err ! {:?}", e);
         }
     }

@@ -1,3 +1,4 @@
+use crate::alert;
 use crate::services::user_service::LoginResp;
 use reqwest::Client;
 
@@ -192,6 +193,8 @@ pub async fn delete_calories(url: &str, eemail: &str, pw: &str, id: i64) -> Logi
     nurl.push_str("/");
     nurl.push_str(eemail);
 
+    // alert(&nurl);
+
     let resp = client
         .delete(nurl)
         //.json(&req)
@@ -202,6 +205,7 @@ pub async fn delete_calories(url: &str, eemail: &str, pw: &str, id: i64) -> Logi
 
     match resp {
         Ok(res) => {
+            //alert(&res.status().to_string());
             if res.status() == 200 {
                 println!("Calories Response! {:?}", res);
                 // let mut jres = LoginResp{};

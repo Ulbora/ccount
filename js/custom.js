@@ -274,6 +274,18 @@ var addCaloriesByCategoryScreen = function () {
 }
 
 
+
+// //new food
+var add_calory_screen2;
+var setAddCaloryScreen2 = function (fn) {
+    add_calory_screen2 = fn;
+}
+
+var addCaloriesByCategoryScreen2 = function () {
+    add_calory_screen2();
+}
+
+
 // //new food
 var add_food_calories;
 var setAddFoodCalories = function (fn) {
@@ -296,6 +308,10 @@ var getCalariesAddDate = function () {
     return calariesAddDate;
 }
 
+var setCaloriesAddDate = function (val) {
+    calariesAddDate = val;
+}
+
 var addCaloryCatValue;
 var setAddCaloryCatValue = function (val) {
     addCaloryCatValue = val;
@@ -303,3 +319,38 @@ var setAddCaloryCatValue = function (val) {
 var getCaloryCatValue = function () {
     return addCaloryCatValue;
 }
+
+
+
+
+///----------------
+
+
+// //new food
+var remove_food_calories;
+var setRemoveFoodCalories = function (fn) {
+    remove_food_calories = fn;
+}
+
+
+var caloriesIdToRem;
+var caloriesRemDate;
+var remCaloriesForDay = function (id, dt) {
+    caloriesIdToRem = id;
+    caloriesRemDate = dt;
+    remove_food_calories();
+}
+
+var getCalariesIdToRem = function () {
+    return caloriesIdToRem;
+}
+
+var getCalariesRemDate = function () {
+    return caloriesRemDate;
+}
+
+var setCaloriesRemDate = function (val) {
+    caloriesRemDate = val;
+}
+
+
