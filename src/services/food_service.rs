@@ -2,7 +2,6 @@ use crate::services::user_service::LoginResp;
 use reqwest::Client;
 
 use serde::{Deserialize, Serialize};
-use serde_json::Result;
 
 #[derive(Debug, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
@@ -26,13 +25,6 @@ pub struct Food {
 pub async fn db_new_food(url: &str, eemail: &str, pw: &str, req: &NewFood) -> LoginResp {
     let rtn = LoginResp { success: false };
 
-    // let em = String::from(eemail);
-    // let ppw = String::from(pw);
-
-    // let req = LoginReq {
-    //     email: em,
-    //     password: ppw,
-    // };
     let client = Client::new();
 
     let mut creds = String::from(eemail);
@@ -44,7 +36,6 @@ pub async fn db_new_food(url: &str, eemail: &str, pw: &str, req: &NewFood) -> Lo
     let resp = client
         .post(url)
         .json(&req)
-        // .header("api-key", "ddjdt373dcf7dhdh222282727fffeee")
         .header("Authorization", b64creds)
         .send()
         .await;
@@ -53,18 +44,8 @@ pub async fn db_new_food(url: &str, eemail: &str, pw: &str, req: &NewFood) -> Lo
         Ok(res) => {
             if res.status() == 200 {
                 println!("Response! {:?}", res);
-                // let mut jres = LoginResp{};
                 let jresp = res.json::<LoginResp>();
                 return jresp.await.unwrap();
-                // match jresp {
-                //     Ok(jres) => {
-                //         if jres.success {
-                //             rtn = true;
-                //         }
-                //         println!("Response json! {:?}", jres);
-                //     }
-                //     Err(_) => {}
-                // }
             }
         }
         Err(e) => {
@@ -78,13 +59,6 @@ pub async fn db_new_food(url: &str, eemail: &str, pw: &str, req: &NewFood) -> Lo
 pub async fn db_update_food(url: &str, eemail: &str, pw: &str, req: &Food) -> LoginResp {
     let rtn = LoginResp { success: false };
 
-    // let em = String::from(eemail);
-    // let ppw = String::from(pw);
-
-    // let req = LoginReq {
-    //     email: em,
-    //     password: ppw,
-    // };
     let client = Client::new();
 
     let mut creds = String::from(eemail);
@@ -96,7 +70,6 @@ pub async fn db_update_food(url: &str, eemail: &str, pw: &str, req: &Food) -> Lo
     let resp = client
         .put(url)
         .json(&req)
-        // .header("api-key", "ddjdt373dcf7dhdh222282727fffeee")
         .header("Authorization", b64creds)
         .send()
         .await;
@@ -105,18 +78,8 @@ pub async fn db_update_food(url: &str, eemail: &str, pw: &str, req: &Food) -> Lo
         Ok(res) => {
             if res.status() == 200 {
                 println!("Response! {:?}", res);
-                // let mut jres = LoginResp{};
                 let jresp = res.json::<LoginResp>();
                 return jresp.await.unwrap();
-                // match jresp {
-                //     Ok(jres) => {
-                //         if jres.success {
-                //             rtn = true;
-                //         }
-                //         println!("Response json! {:?}", jres);
-                //     }
-                //     Err(_) => {}
-                // }
             }
         }
         Err(e) => {
@@ -144,8 +107,6 @@ pub async fn get_food_list(url: &str, eemail: &str, pw: &str, cat_id: i64) -> Ve
 
     let resp = client
         .get(nurl)
-        //.json(&req)
-        //.header("apiKey", "GDG651GFD66FD16151sss651f651ff65555ddfhjklyy5")
         .header("Authorization", b64creds)
         .send()
         .await;
@@ -154,18 +115,8 @@ pub async fn get_food_list(url: &str, eemail: &str, pw: &str, cat_id: i64) -> Ve
         Ok(res) => {
             if res.status() == 200 {
                 println!("Category Response! {:?}", res);
-                // let mut jres = LoginResp{};
                 let jresp = res.json::<Vec<Food>>();
                 return jresp.await.unwrap();
-                // match jresp {
-                //     Ok(jres) => {
-                //         if jres.success {
-                //             rtn = true;
-                //         }
-                //         println!("Response json! {:?}", jres);
-                //     }
-                //     Err(_) => {}
-                // }
             }
         }
         Err(e) => {
@@ -191,8 +142,6 @@ pub async fn get_food_list_by_user(url: &str, eemail: &str, pw: &str) -> Vec<Foo
 
     let resp = client
         .get(nurl)
-        //.json(&req)
-        //.header("apiKey", "GDG651GFD66FD16151sss651f651ff65555ddfhjklyy5")
         .header("Authorization", b64creds)
         .send()
         .await;
@@ -201,18 +150,8 @@ pub async fn get_food_list_by_user(url: &str, eemail: &str, pw: &str) -> Vec<Foo
         Ok(res) => {
             if res.status() == 200 {
                 println!("Category Response! {:?}", res);
-                // let mut jres = LoginResp{};
                 let jresp = res.json::<Vec<Food>>();
                 return jresp.await.unwrap();
-                // match jresp {
-                //     Ok(jres) => {
-                //         if jres.success {
-                //             rtn = true;
-                //         }
-                //         println!("Response json! {:?}", jres);
-                //     }
-                //     Err(_) => {}
-                // }
             }
         }
         Err(e) => {
@@ -240,8 +179,6 @@ pub async fn delete_food(url: &str, eemail: &str, pw: &str, id: i64) -> LoginRes
 
     let resp = client
         .delete(nurl)
-        //.json(&req)
-        //.header("apiKey", "GDG651GFD66FD16151sss651f651ff65555ddfhjklyy5")
         .header("Authorization", b64creds)
         .send()
         .await;
@@ -250,18 +187,8 @@ pub async fn delete_food(url: &str, eemail: &str, pw: &str, id: i64) -> LoginRes
         Ok(res) => {
             if res.status() == 200 {
                 println!("Category Response! {:?}", res);
-                // let mut jres = LoginResp{};
                 let jresp = res.json::<LoginResp>();
                 return jresp.await.unwrap();
-                // match jresp {
-                //     Ok(jres) => {
-                //         if jres.success {
-                //             rtn = true;
-                //         }
-                //         println!("Response json! {:?}", jres);
-                //     }
-                //     Err(_) => {}
-                // }
             }
         }
         Err(e) => {

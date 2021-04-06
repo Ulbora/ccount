@@ -1,9 +1,8 @@
 extern crate base64;
-use crate::alert;
+
 use reqwest::Client;
 
 use serde::{Deserialize, Serialize};
-use serde_json::Result;
 
 #[derive(Debug, Serialize)]
 struct LoginReq {
@@ -27,50 +26,22 @@ pub struct LoginResp {
 pub async fn is_prod_alive(url: &str) -> LoginResp {
     let rtn = LoginResp { success: false };
 
-    // let em = String::from(eemail);
-    // let ppw = String::from(pw);
-
     let req = LoginReq {
         email: "test".to_string(),
         password: "test".to_string(),
     };
     let client = Client::new();
 
-    let resp = client
-        .post(url)
-        .json(&req)
-        //.header("apiKey", "GDG651GFD66FD16151sss651f651ff65555ddfhjklyy5")
-        // .header(
-        //     "Authorization",
-        //     "GDG651GFD66FD16151sss651f651ff65555ddfhjklyy5",
-        // )
-        .send()
-        .await;
+    let resp = client.post(url).json(&req).send().await;
     match resp {
         Ok(res) => {
             if res.status() == 401 {
                 println!("Response! {:?}", res);
                 let rtns = LoginResp { success: true };
                 return rtns;
-
-                // let jlp = lp.json;
-                //let j = serde_json::to_string(&lp).unwrap();
-
-                // let jresp = res.json::<LoginResp>();
-                //return j.await.unwrap();
-                // match jresp {
-                //     Ok(jres) => {
-                //         if jres.success {
-                //             rtn = true;
-                //         }
-                //         println!("Response json! {:?}", jres);
-                //     }
-                //     Err(_) => {}
-                // }
             }
         }
         Err(e) => {
-            //alert(&e.to_string());
             println!("Request err ! {:?}", e);
         }
     }
@@ -90,33 +61,14 @@ pub async fn login_user(url: &str, eemail: &str, pw: &str) -> LoginResp {
     };
     let client = Client::new();
 
-    let resp = client
-        .post(url)
-        .json(&req)
-        //.header("apiKey", "GDG651GFD66FD16151sss651f651ff65555ddfhjklyy5")
-        // .header(
-        //     "Authorization",
-        //     "GDG651GFD66FD16151sss651f651ff65555ddfhjklyy5",
-        // )
-        .send()
-        .await;
+    let resp = client.post(url).json(&req).send().await;
 
     match resp {
         Ok(res) => {
             if res.status() == 200 {
                 println!("Response! {:?}", res);
-                // let mut jres = LoginResp{};
                 let jresp = res.json::<LoginResp>();
                 return jresp.await.unwrap();
-                // match jresp {
-                //     Ok(jres) => {
-                //         if jres.success {
-                //             rtn = true;
-                //         }
-                //         println!("Response json! {:?}", jres);
-                //     }
-                //     Err(_) => {}
-                // }
             }
         }
         Err(e) => {
@@ -150,7 +102,6 @@ pub async fn db_change_pw(url: &str, eemail: &str, pw: &str, npw: &str) -> Login
     let resp = client
         .post(url)
         .json(&req)
-        //.header("apiKey", "GDG651GFD66FD16151sss651f651ff65555ddfhjklyy5")
         .header("Authorization", b64creds)
         .send()
         .await;
@@ -159,18 +110,8 @@ pub async fn db_change_pw(url: &str, eemail: &str, pw: &str, npw: &str) -> Login
         Ok(res) => {
             if res.status() == 200 {
                 println!("Response! {:?}", res);
-                // let mut jres = LoginResp{};
                 let jresp = res.json::<LoginResp>();
                 return jresp.await.unwrap();
-                // match jresp {
-                //     Ok(jres) => {
-                //         if jres.success {
-                //             rtn = true;
-                //         }
-                //         println!("Response json! {:?}", jres);
-                //     }
-                //     Err(_) => {}
-                // }
             }
         }
         Err(e) => {
@@ -193,17 +134,10 @@ pub async fn db_new_user(url: &str, eemail: &str, pw: &str) -> LoginResp {
     };
     let client = Client::new();
 
-    // let mut creds = String::from(eemail);
-    // creds.push_str(":");
-    // creds.push_str(pw);
-
-    // let b64creds = &base64::encode(&creds.as_bytes());
-
     let resp = client
         .post(url)
         .json(&req)
         .header("api-key", "ddjdt373dcf7dhdh222282727fffeee")
-        // .header("Authorization", b64creds)
         .send()
         .await;
 
@@ -211,18 +145,8 @@ pub async fn db_new_user(url: &str, eemail: &str, pw: &str) -> LoginResp {
         Ok(res) => {
             if res.status() == 200 {
                 println!("Response! {:?}", res);
-                // let mut jres = LoginResp{};
                 let jresp = res.json::<LoginResp>();
                 return jresp.await.unwrap();
-                // match jresp {
-                //     Ok(jres) => {
-                //         if jres.success {
-                //             rtn = true;
-                //         }
-                //         println!("Response json! {:?}", jres);
-                //     }
-                //     Err(_) => {}
-                // }
             }
         }
         Err(e) => {
