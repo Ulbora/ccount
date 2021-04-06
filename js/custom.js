@@ -272,3 +272,34 @@ var setAddCaloryScreen = function (fn) {
 var addCaloriesByCategoryScreen = function () {
     add_calory_screen();
 }
+
+
+// //new food
+var add_food_calories;
+var setAddFoodCalories = function (fn) {
+    add_food_calories = fn;
+}
+
+var calariesIdToAdd;
+var calariesAddDate;
+var addCaloriesForDay = function (id, dt) {
+    calariesIdToAdd = id;
+    calariesAddDate = dt;
+    add_food_calories();
+}
+
+var getCalariesIdToAdd = function () {
+    return calariesIdToAdd;
+}
+
+var getCalariesAddDate = function () {
+    return calariesAddDate;
+}
+
+var addCaloryCatValue;
+var setAddCaloryCatValue = function (val) {
+    addCaloryCatValue = val;
+}
+var getCaloryCatValue = function () {
+    return addCaloryCatValue;
+}

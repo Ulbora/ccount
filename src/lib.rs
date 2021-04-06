@@ -5,7 +5,6 @@ pub mod food;
 pub mod services;
 pub mod users;
 
-
 // static LOCAL_BASE_URL: &str = "http://localhost:3000";
 
 // static PROD_BASE_URL: &str = "http://ccount.cocka2notes.com";
@@ -74,6 +73,26 @@ extern "C" {
 #[wasm_bindgen]
 extern "C" {
     pub fn getCatValue() -> String;
+}
+
+#[wasm_bindgen]
+extern "C" {
+    pub fn getCalariesIdToAdd() -> String;
+}
+
+#[wasm_bindgen]
+extern "C" {
+    pub fn getCalariesAddDate() -> String;
+}
+
+#[wasm_bindgen]
+extern "C" {
+    pub fn setAddCaloryCatValue(s: &str);
+}
+
+#[wasm_bindgen]
+extern "C" {
+    pub fn getCaloryCatValue() -> String;
 }
 
 #[wasm_bindgen]
