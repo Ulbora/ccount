@@ -3,28 +3,26 @@ use crate::getCalDateValue;
 use crate::getCalariesAddDate;
 use crate::getCalariesIdToAdd;
 use crate::getCalariesIdToRem;
-use crate::getCalariesRemDate;
-use crate::getCaloryCatValue;
-use crate::getCatValue;
+
 use crate::getUserEmail;
 use crate::getUserPw;
 use crate::services::calory_service::db_new_calories;
 use crate::services::calory_service::delete_calories;
 use crate::services::calory_service::get_calory_list_by_day;
-use crate::services::calory_service::get_daily_calories;
+
 use crate::services::calory_service::NewCalories;
 use crate::services::category_service::get_category_list;
 use crate::services::food_service::get_food_list;
 use crate::services::food_service::get_food_list_by_user;
 use crate::services::food_service::Food;
 use crate::services::user_service::is_prod_alive;
-use crate::services::user_service::LoginResp;
+
 use crate::setAddCaloryCatValue;
 use crate::setCaloriesAddDate;
 use crate::LOCAL_BASE_URL;
 use crate::PROD_BASE_URL;
 use crate::PROD_TEST_URL;
-use js_sys::*;
+
 use std::collections::HashMap;
 use wasm_bindgen::prelude::*;
 use wasm_bindgen::JsCast;
@@ -48,16 +46,12 @@ pub async fn food_calory_screen() {
     let epw = getUserPw();
 
     let cal_date = getCalDateValue();
-    let cat_val = getCatValue();
 
     let mut seldate = String::new();
 
     if cal_date.eq("") {
-        //// let mut ndt = "";
-        //
         let now = js_sys::Date::now();
         let dt = js_sys::Date::new(&JsValue::from_f64(now));
-        //let dt = chrono::offset::Local::now();
         let m = dt.get_month();
         let d = dt.get_date();
         let y = dt.get_full_year();
@@ -72,7 +66,6 @@ pub async fn food_calory_screen() {
             ds.push_str(&d.to_string());
         }
         let ys = y.to_string();
-        // //let m = dt.
         let mut today = String::new();
         today.push_str(&ys);
         today.push_str("-");
@@ -83,20 +76,11 @@ pub async fn food_calory_screen() {
     }
 
     let cat_list = get_category_list(&url, &uemail, &epw).await;
-    let fd_list = get_food_list_by_user(&fdurl, &uemail, &epw).await;
-    // Use `web_sys`'s global `window` function to get a handle on the global
-    // window object.
     let window = web_sys::window().expect("no global `window` exists");
     let document = window.document().expect("should have a document on window");
     let body = document.body().expect("document should have a body");
 
-    // Manufacture the element we're gonna append
-    // let val = document.create_element("p").unwrap();
     let val = document.get_element_by_id("cont").unwrap();
-    // val.set_text_content(Some("Hello from Rust!"));
-    // val.set_text_content(Some(
-    //     "<div onclick=\"get_calories_by_day('hi ken');\">Test this</div>",
-    // ));
 
     let mut cmap: HashMap<i64, String> = HashMap::new();
     let mut html = String::from("<div id=\"foodScreen\" class=\"container-sm mt-5\">");
@@ -108,11 +92,8 @@ pub async fn food_calory_screen() {
     html.push_str("<label>Day</label>");
     html.push_str("<input id=\"day\" class=\"form-control\" type=\"date\" ");
     html.push_str("value=\"");
-    //html.push_str("2021-4-3");
     html.push_str(&seldate);
-    // alert(&seldate);
     html.push_str("\" required pattern=\"\\d{2}-\\d{2}-\\d{4}\">");
-    //html.push_str("<input id=\"day\" class=\"form-control\" type=\"date\">");
     html.push_str("</div>");
     html.push_str("</div>");
     html.push_str("<div class=\"form-group\">");
@@ -135,53 +116,15 @@ pub async fn food_calory_screen() {
     html.push_str("</form>");
     html.push_str("</div>");
 
-    // html.push_str("<h2>Existing Calories</h2>");
-    // html.push_str("<table class=\"table table-hover mb-5\">");
-    // html.push_str("<thead>");
-    // html.push_str("<tr>");
-    // html.push_str("<th scope=\"col\">Food</th>");
-    // html.push_str("<th scope=\"col\">Calories</th>");
-    // html.push_str("<th scope=\"col\">Category</th>");
-    // html.push_str("</tr>");
-    // html.push_str("</thead>");
-    // html.push_str("<tbody>");
-    // for f in fd_list {
-    //     html.push_str("<tr class='clickable-row' onclick=\"foodItemScreen('");
-    //     html.push_str(&f.id.to_string());
-    //     html.push_str("','");
-    //     html.push_str(&f.name);
-    //     html.push_str("','");
-    //     html.push_str(&f.calories.to_string());
-    //     html.push_str("');\">");
-    //     html.push_str("<td>");
-    //     html.push_str(&f.name);
-    //     html.push_str("</td>");
-    //     html.push_str("<td>");
-    //     html.push_str(&f.calories.to_string());
-    //     html.push_str("</td>");
-
-    //     html.push_str("<td>");
-    //     html.push_str(&cmap[&f.category_id]);
-    //     html.push_str("</td>");
-    //     html.push_str("</tr>");
-    // }
-    // html.push_str("</tbody>");
-    // html.push_str("</table>");
     html.push_str("</div>");
 
     val.set_inner_html(&html);
-
-    //val.set_inner_html("<div style=\"margin: 5% 0 0 0;\">test</div>");
 
     body.append_child(&val).unwrap();
 }
 
 #[wasm_bindgen]
 pub async fn add_calory_screen() {
-    //alert("in add_calory_screen");
-    let cal_date = getCalDateValue();
-    let cat_val = getCatValue();
-
     let uemail = getUserEmail();
     let epw = getUserPw();
 
@@ -202,8 +145,6 @@ pub async fn add_calory_screen() {
     let document = window.document().expect("should have a document on window");
     let body = document.body().expect("document should have a body");
 
-    // Manufacture the element we're gonna append
-    // let val = document.create_element("p").unwrap();
     let val = document.get_element_by_id("cont").unwrap();
 
     let catval = document
@@ -221,19 +162,9 @@ pub async fn add_calory_screen() {
         .value();
 
     if !catval.eq("0") && !dt.eq("") {
-        // alert(&dt);
-        // alert(&catval);
         setAddCaloryCatValue(&catval);
 
         let dtspl = dt.split("-");
-        //let daymill = js_sys::Date::parse("2021-04-05 GMT");
-        //let day = js_sys::Date::new(&JsValue::from_f64(daymill));
-        //day.set_time(daymill);
-        // alert(&day.get_full_year().to_string());
-
-        // let now = js_sys::Date::now();
-        //let day = js_sys::Date::new(&JsValue::from_f64(now));
-        //day.set_time(daymill);
 
         let mut cat_disp = String::new();
         let cat_id = catval.parse::<i64>().unwrap();
@@ -241,24 +172,6 @@ pub async fn add_calory_screen() {
         let cat_list = get_category_list(&url, &uemail, &epw).await;
         let fd_list = get_food_list_by_user(&fdurl, &uemail, &epw).await;
 
-        // let ystr = &day.get_full_year().to_string();
-        // let mstr = &(day.get_month() + 1).to_string();
-        // let dstr = &day.get_date().to_string();
-        //let m = day.get_month();
-        //let d = day.get_date();
-        //let y = day.get_full_year();
-        //let mut ms = (m + 1).to_string();
-        //if ms.len() < 2 {
-        //ms = String::from("0");
-        //ms.push_str(&(m + 1).to_string());
-        //}
-        //let mut ds = d.to_string();
-        //alert(&day.get_date().to_string());
-        // if ds.len() < 2 {
-        // ds = String::from("0");
-        // ds.push_str(&d.to_string());
-        //}
-        //let ys = y.to_string();
         if dtspl.count() == 3 {
             let dtcol: Vec<&str> = dt.split("-").collect();
             let mut sdate = String::from(dtcol[1]);
@@ -266,25 +179,14 @@ pub async fn add_calory_screen() {
             sdate.push_str(dtcol[2]);
             sdate.push_str("-");
             sdate.push_str(dtcol[0]);
-            //alert(&sdate);
 
             setCaloriesAddDate(&sdate);
 
             let cal_list = get_calory_list_by_day(&caurl, &uemail, &epw, &sdate).await;
-            //let mut sdate = String::from(ms);
-            //sdate.push_str("-");
-            // sdate.push_str(&ds);
-            //sdate.push_str("-");
-            //sdate.push_str(&ys);
-            //(&sdate);
             let mut fmap: HashMap<i64, Food> = HashMap::new();
             for f in fd_list {
                 fmap.insert(f.id, f);
             }
-            // for key in fmap.keys() {
-            //     alert(&key.to_string());
-            // }
-            //alert(&fmap.len().to_string());
 
             let fd_list = get_food_list(&fdurl, &uemail, &epw, cat_id).await;
             let mut cmap: HashMap<i64, String> = HashMap::new();
@@ -295,15 +197,12 @@ pub async fn add_calory_screen() {
                 cmap.insert(c.id, c.name.clone());
             }
 
-            // alert(&catval);
-            //alert(&cat_disp);
+            let mut cal_total = 0;
+
             let mut html =
                 String::from("<div id=\"selectFoodScreen\" class=\"container-sm mt-5\">");
             html.push_str("<div class=\"shadow-none p-3 mb-5 mt-5 rounded\">");
             html.push_str("<h2>Add Calories</h2>");
-            // html.push_str("<h6>Category: ");
-            // html.push_str(&cat_disp);
-            // html.push_str("</h6>");
             html.push_str("<div class=\"form-group\">");
             html.push_str("<label for=\"cat\">Category</label>");
             html.push_str("<select class=\"form-control\" id=\"cat\" onchange=\"addCaloriesByCategoryScreen2();\">");
@@ -331,7 +230,6 @@ pub async fn add_calory_screen() {
             html.push_str("<th scope=\"col\">Food</th>");
             html.push_str("<th scope=\"col\">Calories</th>");
             html.push_str("<th scope=\"col\"></th>");
-            // html.push_str("<th scope=\"col\"></th>");
             html.push_str("</tr>");
             html.push_str("</thead>");
             html.push_str("<tbody>");
@@ -343,7 +241,6 @@ pub async fn add_calory_screen() {
                 html.push_str("<td>");
                 html.push_str(&f.calories.to_string());
                 html.push_str("</td>");
-                // alert(&html);
                 html.push_str("<td>");
                 html.push_str(
                     "<button type=\"button\" class=\"btn btn-success\" onclick=\"addCaloriesForDay('",
@@ -354,22 +251,10 @@ pub async fn add_calory_screen() {
                 html.push_str("');\" >+</button>");
                 html.push_str("</td>");
 
-                // html.push_str("<td>");
-                // html.push_str(
-                //     "<button type=\"button\" class=\"btn btn-danger\" onclick=\"remCaloriesForDay('",
-                // );
-                // html.push_str(&f.id.to_string());
-                // html.push_str("','");
-                // html.push_str(&sdate);
-                // html.push_str("');\" >-</button>");
-                // html.push_str("</td>");
                 html.push_str("</tr>");
             }
-            // alert(&html);
             html.push_str("</tbody>");
             html.push_str("</table>");
-            // html.push_str("</div>");
-            // alert(&html);
 
             html.push_str("<h2 class=\"mt-5;\">Existing Calories</h2>");
             html.push_str("<table class=\"table table-hover mb-5\">");
@@ -383,22 +268,12 @@ pub async fn add_calory_screen() {
             html.push_str("</thead>");
             html.push_str("<tbody>");
             for c in cal_list {
-                //alert(&c.food_id.to_string());
                 html.push_str("<tr>");
-                //html.push_str(&f.id.to_string());
-                // html.push_str("','");
-                //html.push_str(&f.name);
-                //html.push_str("','");
-                // html.push_str(&f.calories.to_string());
-                //html.push_str("');\">");
                 html.push_str("<td>");
                 html.push_str(&fmap[&c.food_id].name);
-                // html.push_str(&c.food_id.to_string());
-                //alert(&html);
                 html.push_str("</td>");
                 html.push_str("<td>");
                 html.push_str(&fmap[&c.food_id].calories.to_string());
-                // html.push_str(&c.food_id.to_string());
                 html.push_str("</td>");
 
                 html.push_str("<td>");
@@ -414,7 +289,21 @@ pub async fn add_calory_screen() {
                 html.push_str("');\" >-</button>");
                 html.push_str("</td>");
                 html.push_str("</tr>");
+                cal_total += &fmap[&c.food_id].calories;
             }
+
+            html.push_str("<tr class=\"table-active\">");
+            html.push_str("<td>");
+            html.push_str("Total Calories");
+            html.push_str("</td>");
+            html.push_str("<td>");
+            html.push_str(&cal_total.to_string());
+            html.push_str("</td>");
+            html.push_str("<td>");
+            html.push_str("</td>");
+            html.push_str("<td>");
+            html.push_str("</td>");
+            html.push_str("</tr>");
             html.push_str("</tbody>");
             html.push_str("</table>");
             html.push_str("</div>");
@@ -428,13 +317,9 @@ pub async fn add_calory_screen() {
 
 #[wasm_bindgen]
 pub async fn add_calory_screen2() {
-    let cal_date = getCalDateValue();
-    let cat_val = getCatValue();
-    // alert("in add_calory_screen2");
     let uemail = getUserEmail();
     let epw = getUserPw();
     let sdate = getCalariesAddDate();
-    let fcatval = getCaloryCatValue();
 
     let pa = is_prod_alive(&PROD_TEST_URL).await;
     let mut url = String::from(LOCAL_BASE_URL);
@@ -448,14 +333,11 @@ pub async fn add_calory_screen2() {
     url.push_str(&String::from("/category/list"));
     fdurl.push_str(&String::from("/food/list"));
     caurl.push_str(&String::from("/calory/list"));
-    //alert(&url);
 
     let window = web_sys::window().expect("no global `window` exists");
     let document = window.document().expect("should have a document on window");
     let body = document.body().expect("document should have a body");
 
-    // Manufacture the element we're gonna append
-    // let val = document.create_element("p").unwrap();
     let val = document.get_element_by_id("cont").unwrap();
 
     let catval = document
@@ -465,69 +347,16 @@ pub async fn add_calory_screen2() {
         .unwrap()
         .value();
 
-    // let dt = document
-    //     .get_element_by_id("day")
-    //     .unwrap()
-    //     .dyn_into::<web_sys::HtmlInputElement>()
-    //     .unwrap()
-    //     .value();
-    //alert(&catval);
     if !catval.eq("0") && !sdate.eq("") {
-        //alert(&sdate);
-        // alert(&catval);
         setAddCaloryCatValue(&catval);
-
-        //let dtspl = dt.split("-");
-        //let daymill = js_sys::Date::parse("2021-04-05 GMT");
-        //let day = js_sys::Date::new(&JsValue::from_f64(daymill));
-        //day.set_time(daymill);
-        // alert(&day.get_full_year().to_string());
-
-        // let now = js_sys::Date::now();
-        //let day = js_sys::Date::new(&JsValue::from_f64(now));
-        //day.set_time(daymill);
 
         let mut cat_disp = String::new();
         let cat_id = catval.parse::<i64>().unwrap();
 
         let cat_list = get_category_list(&url, &uemail, &epw).await;
-        // let fd_list = get_food_list(&fdurl, &uemail, &epw, cat_id).await;
         let fd_list = get_food_list_by_user(&fdurl, &uemail, &epw).await;
 
-        // let ystr = &day.get_full_year().to_string();
-        // let mstr = &(day.get_month() + 1).to_string();
-        // let dstr = &day.get_date().to_string();
-        //let m = day.get_month();
-        //let d = day.get_date();
-        //let y = day.get_full_year();
-        //let mut ms = (m + 1).to_string();
-        //if ms.len() < 2 {
-        //ms = String::from("0");
-        //ms.push_str(&(m + 1).to_string());
-        //}
-        //let mut ds = d.to_string();
-        //alert(&day.get_date().to_string());
-        // if ds.len() < 2 {
-        // ds = String::from("0");
-        // ds.push_str(&d.to_string());
-        //}
-        //let ys = y.to_string();
-        //if dtspl.count() == 3 {
-        //let dtcol: Vec<&str> = dt.split("-").collect();
-        //let mut sdate = String::from(dtcol[1]);
-        // sdate.push_str("-");
-        // sdate.push_str(dtcol[2]);
-        //sdate.push_str("-");
-        //sdate.push_str(dtcol[0]);
-        //alert(&sdate);
-
         let cal_list = get_calory_list_by_day(&caurl, &uemail, &epw, &sdate).await;
-        //let mut sdate = String::from(ms);
-        //sdate.push_str("-");
-        // sdate.push_str(&ds);
-        //sdate.push_str("-");
-        //sdate.push_str(&ys);
-        //(&sdate);
         let mut fmap: HashMap<i64, Food> = HashMap::new();
         for f in fd_list {
             fmap.insert(f.id, f);
@@ -542,14 +371,11 @@ pub async fn add_calory_screen2() {
             cmap.insert(c.id, c.name.clone());
         }
 
-        // alert(&catval);
-        // alert(&cat_disp);
+        let mut cal_total = 0;
+
         let mut html = String::from("<div id=\"selectFoodScreen\" class=\"container-sm mt-5\">");
         html.push_str("<div class=\"shadow-none p-3 mb-5 mt-5 rounded\">");
         html.push_str("<h2>Add Calories</h2>");
-        // html.push_str("<h6>Category: ");
-        // html.push_str(&cat_disp);
-        // html.push_str("</h6>");
         html.push_str("<div class=\"form-group\">");
         html.push_str("<label for=\"cat\">Category</label>");
         html.push_str("<select class=\"form-control\" id=\"cat\" onchange=\"addCaloriesByCategoryScreen2();\">");
@@ -577,7 +403,6 @@ pub async fn add_calory_screen2() {
         html.push_str("<th scope=\"col\">Food</th>");
         html.push_str("<th scope=\"col\">Calories</th>");
         html.push_str("<th scope=\"col\"></th>");
-        // html.push_str("<th scope=\"col\"></th>");
         html.push_str("</tr>");
         html.push_str("</thead>");
         html.push_str("<tbody>");
@@ -600,20 +425,10 @@ pub async fn add_calory_screen2() {
             html.push_str("');\" >+</button>");
             html.push_str("</td>");
 
-            // html.push_str("<td>");
-            // html.push_str(
-            //     "<button type=\"button\" class=\"btn btn-danger\" onclick=\"remCaloriesForDay('",
-            // );
-            // html.push_str(&f.id.to_string());
-            // html.push_str("','");
-            // html.push_str(&sdate);
-            // html.push_str("');\" >-</button>");
-            // html.push_str("</td>");
             html.push_str("</tr>");
         }
         html.push_str("</tbody>");
         html.push_str("</table>");
-        // html.push_str("</div>");
 
         html.push_str("<h2 class=\"mt-5;\">Existing Calories</h2>");
         html.push_str("<table class=\"table table-hover mb-5\">");
@@ -627,13 +442,7 @@ pub async fn add_calory_screen2() {
         html.push_str("</thead>");
         html.push_str("<tbody>");
         for c in cal_list {
-            html.push_str("<tr class='clickable-row'>");
-            //html.push_str(&f.id.to_string());
-            // html.push_str("','");
-            //html.push_str(&f.name);
-            //html.push_str("','");
-            // html.push_str(&f.calories.to_string());
-            //html.push_str("');\">");
+            html.push_str("<tr>");
             html.push_str("<td>");
             html.push_str(&fmap[&c.food_id].name);
             html.push_str("</td>");
@@ -641,9 +450,6 @@ pub async fn add_calory_screen2() {
             html.push_str(&fmap[&c.food_id].calories.to_string());
             html.push_str("</td>");
 
-            html.push_str("<td>");
-            html.push_str(&cmap[&fmap[&c.food_id].category_id]);
-            html.push_str("</td>");
             html.push_str("<td>");
             html.push_str(&cmap[&fmap[&c.food_id].category_id]);
             html.push_str("</td>");
@@ -657,7 +463,21 @@ pub async fn add_calory_screen2() {
             html.push_str("');\" >-</button>");
             html.push_str("</td>");
             html.push_str("</tr>");
+            cal_total += &fmap[&c.food_id].calories;
         }
+        html.push_str("<tr class=\"table-active\">");
+        html.push_str("<td>");
+        html.push_str("Total Calories");
+        html.push_str("</td>");
+        html.push_str("<td>");
+        html.push_str(&cal_total.to_string());
+        html.push_str("</td>");
+        html.push_str("<td>");
+        html.push_str("</td>");
+        html.push_str("<td>");
+        html.push_str("</td>");
+        html.push_str("</tr>");
+
         html.push_str("</tbody>");
         html.push_str("</table>");
         html.push_str("</div>");
@@ -665,16 +485,11 @@ pub async fn add_calory_screen2() {
         val.set_inner_html(&html);
 
         body.append_child(&val).unwrap();
-        // }
     }
 }
 
 #[wasm_bindgen]
 pub async fn add_food_calories() {
-    // let cal_date = getCalDateValue();
-    // let cat_val = getCatValue();
-    // alert("in add food");
-
     let uemail = getUserEmail();
     let epw = getUserPw();
 
@@ -682,18 +497,11 @@ pub async fn add_food_calories() {
     let fadt = getCalariesAddDate();
     let pa = is_prod_alive(&PROD_TEST_URL).await;
     let mut url = String::from(LOCAL_BASE_URL);
-    // let mut fdurl = String::from(LOCAL_BASE_URL);
-    //let mut caurl = String::from(LOCAL_BASE_URL);
     if pa.success {
         url = String::from(PROD_BASE_URL);
-        // fdurl = String::from(PROD_BASE_URL);
-        //caurl = String::from(PROD_BASE_URL);
     }
-    //url.push_str(&String::from("/category/list"));
-    //fdurl.push_str(&String::from("/food/list"));
     url.push_str(&String::from("/calories/new"));
 
-    //alert(&fids);
     let fid = fids.parse::<i64>().unwrap();
     let ncr = NewCalories {
         day: fadt,
@@ -703,7 +511,6 @@ pub async fn add_food_calories() {
     let uemail = getUserEmail();
     let afdres = db_new_calories(&url, &uemail, &epw, &ncr).await;
     if afdres.success {
-        //alert("in add food");
         add_calory_screen2().await;
     } else {
         alert("Failed to add calories!");
@@ -713,58 +520,25 @@ pub async fn add_food_calories() {
 
 #[wasm_bindgen]
 pub async fn remove_food_calories() {
-    // let cal_date = getCalDateValue();
-    // let cat_val = getCatValue();
-    // alert("in add food");
-
-    //let uemail = getUserEmail();
     let epw = getUserPw();
 
     let cids = getCalariesIdToRem();
-    let fadt = getCalariesRemDate();
     let pa = is_prod_alive(&PROD_TEST_URL).await;
     let mut url = String::from(LOCAL_BASE_URL);
-    // let mut fdurl = String::from(LOCAL_BASE_URL);
     let mut calurl = String::from(LOCAL_BASE_URL);
     if pa.success {
         url = String::from(PROD_BASE_URL);
-        // fdurl = String::from(PROD_BASE_URL);
         calurl = String::from(PROD_BASE_URL);
     }
-    //url.push_str(&String::from("/category/list"));
-    //fdurl.push_str(&String::from("/food/list"));
     url.push_str(&String::from("/calories"));
     calurl.push_str(&String::from("/calory/list"));
 
     let uemail = getUserEmail();
 
-    // alert(&cids);
     let cid = cids.parse::<i64>().unwrap();
-
-    //let mut dcalid: i64 = 0;
-
-    // alert(&fadt);
-
-    // let ecal_list = get_calory_list_by_day(&calurl, &uemail, &epw, &fadt).await;
-
-    // for ec in ecal_list {
-    //     if ec.food_id == fid {
-    //         dcalid = ec.id;
-    //         break;
-    //     }
-    // }
-
-    // let ncr = NewCalories {
-    //     day: fadt,
-    //     food_id: fid,
-    //     user_email: uemail,
-    // };
-
-    //alert(&dcalid.to_string());
 
     let afdres = delete_calories(&url, &uemail, &epw, cid).await;
     if afdres.success {
-        //alert("in add food");
         add_calory_screen2().await;
     } else {
         alert("Failed to remove calories!");
