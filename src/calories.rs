@@ -545,3 +545,17 @@ pub async fn remove_food_calories() {
         add_calory_screen2().await;
     }
 }
+
+#[wasm_bindgen]
+pub async fn get_calories_by_day() {
+    let window = web_sys::window().expect("no global `window` exists");
+    let document = window.document().expect("should have a document on window");
+    let body = document.body().expect("document should have a body");
+
+    let val = document.get_element_by_id("cont").unwrap();
+    val.set_inner_html(
+        "<div style=\"margin: 5% 0 0 0;\" onclick=\"alert('hi ken');\">Some new calories</div>",
+    );
+
+    body.append_child(&val).unwrap();
+}

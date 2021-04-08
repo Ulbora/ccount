@@ -77,13 +77,13 @@ var getCaloriesByDay = function () {
     get_calories_by_day("ken");
 }
 
-var get_food_by_day;
-var setFoodByDay = function (fn) {
-    get_food_by_day = fn;
-}
-var getFoodByDay = function () {
-    get_food_by_day();
-}
+// var get_food_by_day;
+// var setFoodByDay = function (fn) {
+//     get_food_by_day = fn;
+// }
+// var getFoodByDay = function () {
+//     get_food_by_day();
+// }
 
 var login;
 var setLogin = function (fn) {

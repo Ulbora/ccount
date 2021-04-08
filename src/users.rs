@@ -1,6 +1,7 @@
+use crate::calories::get_calories_by_day;
 use crate::getUserEmail;
 use crate::getUserPw;
-use crate::get_calories_by_day;
+
 use crate::services::user_service::db_change_pw;
 use crate::services::user_service::db_new_user;
 use crate::services::user_service::is_prod_alive;
