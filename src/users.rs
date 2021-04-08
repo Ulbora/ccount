@@ -80,7 +80,7 @@ pub async fn user_login() {
     if suc.success {
         setUserEmail(&email);
         setUserPw(&pw);
-        get_calories_by_day();
+        get_calories_by_day().await;
     } else {
         let body = document.body().expect("document should have a body");
         let val = document.get_element_by_id("cont").unwrap();
@@ -210,7 +210,7 @@ pub async fn change_pw() {
         let suc = db_change_pw(&url, &uemail, &epw, &pw).await;
         if suc.success {
             setUserPw(&pw);
-            get_calories_by_day();
+            get_calories_by_day().await;
         } else {
             change_pw_screen_pw_no_match();
         }
@@ -363,7 +363,7 @@ pub async fn register() {
         if suc.success {
             setUserEmail(&email);
             setUserPw(&pw);
-            get_calories_by_day();
+            get_calories_by_day().await;
         } else {
             register_screen_dup();
         }

@@ -26,6 +26,12 @@ pub struct DailyCalories {
     pub calories: i32,
 }
 
+#[derive(Debug, Deserialize, Serialize)]
+pub struct CaloryCount {
+    pub calories: i32,
+    pub day: String,
+}
+
 pub async fn db_new_calories(url: &str, eemail: &str, pw: &str, req: &NewCalories) -> LoginResp {
     let rtn = LoginResp { success: false };
 
@@ -92,6 +98,48 @@ pub async fn get_calory_list_by_day(url: &str, eemail: &str, pw: &str, day: &str
         }
         Err(e) => {
             println!("Calories Request err ! {:?}", e);
+        }
+    }
+
+    rtn
+}
+
+pub async fn get_calories_for_days(
+    url: &str,
+    eemail: &str,
+    pw: &str,
+    days: i64,
+) -> Vec<CaloryCount> {
+    let rtn: Vec<CaloryCount> = Vec::new();
+    let client = Client::new();
+
+    let mut creds = String::from(eemail);
+    creds.push_str(":");
+    creds.push_str(pw);
+
+    let b64creds = &base64::encode(&creds.as_bytes());
+    let mut nurl = String::from(url);
+    nurl.push_str("/");
+    nurl.push_str(eemail);
+    nurl.push_str("/");
+    nurl.push_str(&days.to_string());
+
+    let resp = client
+        .get(nurl)
+        .header("Authorization", b64creds)
+        .send()
+        .await;
+
+    match resp {
+        Ok(res) => {
+            if res.status() == 200 {
+                println!("Calories Response! {:?}", res);
+                let jresp = res.json::<Vec<CaloryCount>>();
+                return jresp.await.unwrap();
+            }
+        }
+        Err(e) => {
+            println!("Calories for days Request err ! {:?}", e);
         }
     }
 

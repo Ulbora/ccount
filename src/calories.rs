@@ -3,6 +3,7 @@ use crate::getCalDateValue;
 use crate::getCalariesAddDate;
 use crate::getCalariesIdToAdd;
 use crate::getCalariesIdToRem;
+use crate::services::calory_service::get_calories_for_days;
 
 use crate::getUserEmail;
 use crate::getUserPw;
@@ -548,14 +549,52 @@ pub async fn remove_food_calories() {
 
 #[wasm_bindgen]
 pub async fn get_calories_by_day() {
+    let uemail = getUserEmail();
+    let epw = getUserPw();
+
+    // let fids = getCalariesIdToAdd();
+    // let fadt = getCalariesAddDate();
+    let pa = is_prod_alive(&PROD_TEST_URL).await;
+    let mut url = String::from(LOCAL_BASE_URL);
+    if pa.success {
+        url = String::from(PROD_BASE_URL);
+    }
+    url.push_str(&String::from("/calories/days"));
+
+    let count_list = get_calories_for_days(&url, &uemail, &epw, 10).await;
+
     let window = web_sys::window().expect("no global `window` exists");
     let document = window.document().expect("should have a document on window");
     let body = document.body().expect("document should have a body");
 
     let val = document.get_element_by_id("cont").unwrap();
-    val.set_inner_html(
-        "<div style=\"margin: 5% 0 0 0;\" onclick=\"alert('hi ken');\">Some new calories</div>",
-    );
 
+    let mut html = String::from("<div id=\"selectFoodScreen\" class=\"container-sm mt-5\">");
+    html.push_str("<div class=\"shadow-none p-3 mb-5 mt-5 rounded\">");
+    html.push_str("<h2>Your Calories</h2>");
+    html.push_str("<table class=\"table table-striped mb-5\">");
+    html.push_str("<thead>");
+    html.push_str("<tr>");
+    html.push_str("<th scope=\"col\">Day</th>");
+    html.push_str("<th scope=\"col\">Calories</th>");
+    html.push_str("</tr>");
+    html.push_str("</thead>");
+    html.push_str("<tbody>");
+    for c in count_list {
+        html.push_str("<tr>");
+        html.push_str("<td>");
+        html.push_str(&c.day);
+        html.push_str("</td>");
+        html.push_str("<td>");
+        html.push_str(&c.calories.to_string());
+        html.push_str("</td>");
+        html.push_str("</tr>");
+    }
+    html.push_str("</tbody>");
+    html.push_str("</table>");
+
+    html.push_str("</div>");
+    html.push_str("</div>");
+    val.set_inner_html(&html);
     body.append_child(&val).unwrap();
 }

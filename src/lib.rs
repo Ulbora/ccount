@@ -112,55 +112,8 @@ extern "C" {
     pub fn setCaloriesRemDate(s: &str);
 }
 
-// #[wasm_bindgen]
-// pub fn get_calories_by_day() {
-//     let window = web_sys::window().expect("no global `window` exists");
-//     let document = window.document().expect("should have a document on window");
-//     let body = document.body().expect("document should have a body");
-
-//     let val = document.get_element_by_id("cont").unwrap();
-//     val.set_inner_html(
-//         "<div style=\"margin: 5% 0 0 0;\" onclick=\"alert('hi ken');\">Some new calories</div>",
-//     );
-
-//     body.append_child(&val).unwrap();
-// }
-
-// #[wasm_bindgen]
-// pub fn get_food_by_day() {
-//     let window = web_sys::window().expect("no global `window` exists");
-//     let document = window.document().expect("should have a document on window");
-//     let body = document.body().expect("document should have a body");
-
-//     let val = document.get_element_by_id("cont").unwrap();
-//     val.set_inner_html(
-//         "<div style=\"margin: 5% 0 0 0;\" onclick=\"alert('hi ken');\">Some new food</div>",
-//     );
-
-//     body.append_child(&val).unwrap();
-// }
-
 #[wasm_bindgen(start)]
 pub async fn run() -> Result<(), JsValue> {
-    // let window = web_sys::window().expect("no global `window` exists");
-    // let document = window.document().expect("should have a document on window");
-    // let body = document.body().expect("document should have a body");
-
-    // let val = document.get_element_by_id("cont").unwrap();
-    // val.set_inner_html(
-    //     "<div style=\"margin: 5% 0 0 0;\" onclick=\"alert('hi ken');\">Test this</div>",
-    // );
-
-    // body.append_child(&val)?;
     get_calories_by_day().await;
-
     Ok(())
 }
-
-// #[cfg(test)]
-// mod tests {
-//     #[test]
-//     fn it_works() {
-//         assert_eq!(2 + 2, 4);
-//     }
-// }
