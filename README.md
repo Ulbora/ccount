@@ -1,6 +1,6 @@
 # Ccount
 
-Ccount is a Webassembly calory counting application written in Rust.
+Ccount is a Webassembly calorie counting application written in Rust.
 
 Ccount is a quick and easy way to keep tract of caloric intake. It offeres the following:
 
