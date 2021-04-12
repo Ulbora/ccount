@@ -10,7 +10,11 @@ const LOCAL_BASE_URL: &str = "http://localhost:3000";
 
 const PROD_BASE_URL: &str = "http://ccount.cocka2notes.com";
 
-const PROD_TEST_URL: &str = "http://ccount.cocka2notes.com/user/login";
+const PROD_TEST_URL: &str = "http://ccount.cocka2notes.com/alive";
+
+// const PROD_BASE_URL: &str = "http://localhost:3000";
+
+// const PROD_TEST_URL: &str = "http://localhost:3000/alive";
 
 #[wasm_bindgen]
 extern "C" {

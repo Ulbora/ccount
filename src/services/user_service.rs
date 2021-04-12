@@ -25,17 +25,12 @@ pub struct LoginResp {
 
 pub async fn is_prod_alive(url: &str) -> LoginResp {
     let rtn = LoginResp { success: false };
-
-    let req = LoginReq {
-        email: "test".to_string(),
-        password: "test".to_string(),
-    };
     let client = Client::new();
 
-    let resp = client.post(url).json(&req).send().await;
+    let resp = client.get(url).send().await;
     match resp {
         Ok(res) => {
-            if res.status() == 401 {
+            if res.status() == 200 {
                 println!("Response! {:?}", res);
                 let rtns = LoginResp { success: true };
                 return rtns;
