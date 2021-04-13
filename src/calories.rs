@@ -16,13 +16,13 @@ use crate::services::category_service::get_category_list;
 use crate::services::food_service::get_food_list;
 use crate::services::food_service::get_food_list_by_user;
 use crate::services::food_service::Food;
-use crate::services::user_service::is_prod_alive;
+//use crate::services::user_service::is_prod_alive;
 
 use crate::setAddCaloryCatValue;
 use crate::setCaloriesAddDate;
-use crate::LOCAL_BASE_URL;
+//use crate::LOCAL_BASE_URL;
 use crate::PROD_BASE_URL;
-use crate::PROD_TEST_URL;
+//use crate::PROD_TEST_URL;
 
 use std::collections::HashMap;
 use wasm_bindgen::prelude::*;
@@ -30,15 +30,15 @@ use wasm_bindgen::JsCast;
 
 #[wasm_bindgen]
 pub async fn food_calory_screen() {
-    let pa = is_prod_alive(&PROD_TEST_URL).await;
-    let mut url = String::from(LOCAL_BASE_URL);
-    let mut fdurl = String::from(LOCAL_BASE_URL);
-    let mut caurl = String::from(LOCAL_BASE_URL);
-    if pa.success {
-        url = String::from(PROD_BASE_URL);
-        fdurl = String::from(PROD_BASE_URL);
-        caurl = String::from(PROD_BASE_URL);
-    }
+    // let pa = is_prod_alive(&PROD_TEST_URL).await;
+    //let mut url = String::from(LOCAL_BASE_URL);
+    //let mut fdurl = String::from(LOCAL_BASE_URL);
+    // let mut caurl = String::from(LOCAL_BASE_URL);
+    //if pa.success {
+    let mut url = String::from(PROD_BASE_URL);
+    let mut fdurl = String::from(PROD_BASE_URL);
+    let mut caurl = String::from(PROD_BASE_URL);
+    // }
     url.push_str(&String::from("/category/list"));
     fdurl.push_str(&String::from("/food/list"));
     caurl.push_str(&String::from("/calory/list"));
@@ -129,15 +129,15 @@ pub async fn add_calory_screen() {
     let uemail = getUserEmail();
     let epw = getUserPw();
 
-    let pa = is_prod_alive(&PROD_TEST_URL).await;
-    let mut url = String::from(LOCAL_BASE_URL);
-    let mut fdurl = String::from(LOCAL_BASE_URL);
-    let mut caurl = String::from(LOCAL_BASE_URL);
-    if pa.success {
-        url = String::from(PROD_BASE_URL);
-        fdurl = String::from(PROD_BASE_URL);
-        caurl = String::from(PROD_BASE_URL);
-    }
+    // let pa = is_prod_alive(&PROD_TEST_URL).await;
+    // let mut url = String::from(LOCAL_BASE_URL);
+    //   let mut fdurl = String::from(LOCAL_BASE_URL);
+    // let mut caurl = String::from(LOCAL_BASE_URL);
+    // if pa.success {
+    let mut url = String::from(PROD_BASE_URL);
+    let mut fdurl = String::from(PROD_BASE_URL);
+    let mut caurl = String::from(PROD_BASE_URL);
+    // }
     url.push_str(&String::from("/category/list"));
     fdurl.push_str(&String::from("/food/list"));
     caurl.push_str(&String::from("/calory/list"));
@@ -322,15 +322,15 @@ pub async fn add_calory_screen2() {
     let epw = getUserPw();
     let sdate = getCalariesAddDate();
 
-    let pa = is_prod_alive(&PROD_TEST_URL).await;
-    let mut url = String::from(LOCAL_BASE_URL);
-    let mut fdurl = String::from(LOCAL_BASE_URL);
-    let mut caurl = String::from(LOCAL_BASE_URL);
-    if pa.success {
-        url = String::from(PROD_BASE_URL);
-        fdurl = String::from(PROD_BASE_URL);
-        caurl = String::from(PROD_BASE_URL);
-    }
+    //  let pa = is_prod_alive(&PROD_TEST_URL).await;
+    // let mut url = String::from(LOCAL_BASE_URL);
+    //let mut fdurl = String::from(LOCAL_BASE_URL);
+    //let mut caurl = String::from(LOCAL_BASE_URL);
+    // if pa.success {
+    let mut url = String::from(PROD_BASE_URL);
+    let mut fdurl = String::from(PROD_BASE_URL);
+    let mut caurl = String::from(PROD_BASE_URL);
+    // }
     url.push_str(&String::from("/category/list"));
     fdurl.push_str(&String::from("/food/list"));
     caurl.push_str(&String::from("/calory/list"));
@@ -496,11 +496,11 @@ pub async fn add_food_calories() {
 
     let fids = getCalariesIdToAdd();
     let fadt = getCalariesAddDate();
-    let pa = is_prod_alive(&PROD_TEST_URL).await;
-    let mut url = String::from(LOCAL_BASE_URL);
-    if pa.success {
-        url = String::from(PROD_BASE_URL);
-    }
+    // let pa = is_prod_alive(&PROD_TEST_URL).await;
+    // let mut url = String::from(LOCAL_BASE_URL);
+    // if pa.success {
+    let mut url = String::from(PROD_BASE_URL);
+    // }
     url.push_str(&String::from("/calories/new"));
 
     let fid = fids.parse::<i64>().unwrap();
@@ -514,7 +514,7 @@ pub async fn add_food_calories() {
     if afdres.success {
         add_calory_screen2().await;
     } else {
-        alert("Failed to add calories!");
+        //alert("Failed to add calories!");
         add_calory_screen2().await;
     }
 }
@@ -524,13 +524,13 @@ pub async fn remove_food_calories() {
     let epw = getUserPw();
 
     let cids = getCalariesIdToRem();
-    let pa = is_prod_alive(&PROD_TEST_URL).await;
-    let mut url = String::from(LOCAL_BASE_URL);
-    let mut calurl = String::from(LOCAL_BASE_URL);
-    if pa.success {
-        url = String::from(PROD_BASE_URL);
-        calurl = String::from(PROD_BASE_URL);
-    }
+    // let pa = is_prod_alive(&PROD_TEST_URL).await;
+    //let mut url = String::from(LOCAL_BASE_URL);
+    // let mut calurl = String::from(LOCAL_BASE_URL);
+    //if pa.success {
+    let mut url = String::from(PROD_BASE_URL);
+    let mut calurl = String::from(PROD_BASE_URL);
+    //}
     url.push_str(&String::from("/calories"));
     calurl.push_str(&String::from("/calory/list"));
 
@@ -542,7 +542,7 @@ pub async fn remove_food_calories() {
     if afdres.success {
         add_calory_screen2().await;
     } else {
-        alert("Failed to remove calories!");
+        // alert("Failed to remove calories!");
         add_calory_screen2().await;
     }
 }
@@ -554,11 +554,11 @@ pub async fn get_calories_by_day() {
 
     // let fids = getCalariesIdToAdd();
     // let fadt = getCalariesAddDate();
-    let pa = is_prod_alive(&PROD_TEST_URL).await;
-    let mut url = String::from(LOCAL_BASE_URL);
-    if pa.success {
-        url = String::from(PROD_BASE_URL);
-    }
+    //let pa = is_prod_alive(&PROD_TEST_URL).await;
+    // let mut url = String::from(LOCAL_BASE_URL);
+    // if pa.success {
+    let mut url = String::from(PROD_BASE_URL);
+    // }
     url.push_str(&String::from("/calories/days"));
 
     let count_list = get_calories_for_days(&url, &uemail, &epw, 10).await;

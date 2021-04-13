@@ -4,13 +4,13 @@ use crate::getUserPw;
 
 use crate::services::user_service::db_change_pw;
 use crate::services::user_service::db_new_user;
-use crate::services::user_service::is_prod_alive;
+//use crate::services::user_service::is_prod_alive;
 use crate::setUserEmail;
 use crate::setUserPw;
-use crate::LOCAL_BASE_URL;
+//use crate::LOCAL_BASE_URL;
 
 use crate::PROD_BASE_URL;
-use crate::PROD_TEST_URL;
+//use crate::PROD_TEST_URL;
 
 use wasm_bindgen::prelude::*;
 use wasm_bindgen::JsCast;
@@ -53,11 +53,11 @@ pub fn login() {
 
 #[wasm_bindgen]
 pub async fn user_login() {
-    let pa = is_prod_alive(&PROD_TEST_URL).await;
-    let mut url = String::from(LOCAL_BASE_URL);
-    if pa.success {
-        url = String::from(PROD_BASE_URL);
-    }
+    //let pa = is_prod_alive(&PROD_TEST_URL).await;
+    // let mut url = String::from(LOCAL_BASE_URL);
+    //if pa.success {
+    let mut url = String::from(PROD_BASE_URL);
+    //}
     url.push_str(&String::from("/user/login"));
 
     let window = web_sys::window().expect("no global `window` exists");
@@ -180,11 +180,11 @@ pub fn change_pw_screen_pw_no_match() {
 
 #[wasm_bindgen]
 pub async fn change_pw() {
-    let pa = is_prod_alive(&PROD_TEST_URL).await;
-    let mut url = String::from(LOCAL_BASE_URL);
-    if pa.success {
-        url = String::from(PROD_BASE_URL);
-    }
+    //let pa = is_prod_alive(&PROD_TEST_URL).await;
+    // let mut url = String::from(LOCAL_BASE_URL);
+    //if pa.success {
+    let mut url = String::from(PROD_BASE_URL);
+    //}
     url.push_str(&String::from("/user/change/pw"));
 
     let window = web_sys::window().expect("no global `window` exists");
@@ -328,11 +328,11 @@ pub fn register_screen_dup() {
 
 #[wasm_bindgen]
 pub async fn register() {
-    let pa = is_prod_alive(&PROD_TEST_URL).await;
-    let mut url = String::from(LOCAL_BASE_URL);
-    if pa.success {
-        url = String::from(PROD_BASE_URL);
-    }
+    //let pa = is_prod_alive(&PROD_TEST_URL).await;
+    // let mut url = String::from(LOCAL_BASE_URL);
+    // if pa.success {
+    let mut url = String::from(PROD_BASE_URL);
+    // }
     url.push_str(&String::from("/user/new"));
 
     let window = web_sys::window().expect("no global `window` exists");

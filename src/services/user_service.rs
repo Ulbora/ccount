@@ -1,5 +1,6 @@
 extern crate base64;
 
+use crate::alert;
 use reqwest::Client;
 
 use serde::{Deserialize, Serialize};
@@ -23,26 +24,27 @@ pub struct LoginResp {
     pub success: bool,
 }
 
-pub async fn is_prod_alive(url: &str) -> LoginResp {
-    let rtn = LoginResp { success: false };
-    let client = Client::new();
+// pub async fn is_prod_alive(url: &str) -> LoginResp {
+//     let rtn = LoginResp { success: false };
+//     let client = Client::new();
+//     alert(url);
+//     let resp = client.get(url).send().await;
+//     match resp {
+//         Ok(res) => {
+//             //alert(&res.status().to_string());
+//             if res.status() == 200 {
+//                 println!("Response! {:?}", res);
+//                 let rtns = LoginResp { success: true };
+//                 return rtns;
+//             }
+//         }
+//         Err(e) => {
+//             println!("Request err ! {:?}", e);
+//         }
+//     }
 
-    let resp = client.get(url).send().await;
-    match resp {
-        Ok(res) => {
-            if res.status() == 200 {
-                println!("Response! {:?}", res);
-                let rtns = LoginResp { success: true };
-                return rtns;
-            }
-        }
-        Err(e) => {
-            println!("Request err ! {:?}", e);
-        }
-    }
-
-    rtn
-}
+//     rtn
+// }
 
 pub async fn login_user(url: &str, eemail: &str, pw: &str) -> LoginResp {
     let rtn = LoginResp { success: false };
@@ -156,7 +158,7 @@ pub async fn db_new_user(url: &str, eemail: &str, pw: &str) -> LoginResp {
 mod tests {
     use crate::services::user_service::db_change_pw;
     use crate::services::user_service::db_new_user;
-    use crate::services::user_service::is_prod_alive;
+    //use crate::services::user_service::is_prod_alive;
     use crate::services::user_service::login_user;
 
     #[test]
@@ -206,21 +208,21 @@ mod tests {
         assert!(res.success == true)
     }
 
-    #[test]
-    fn is_prod_alive_test() {
-        let url = "http://localhost:3000/user/login";
-        let resp = is_prod_alive(url);
-        let res = tokio_test::block_on(resp);
+    // #[test]
+    // fn is_prod_alive_test() {
+    //     let url = "http://localhost:3000/user/login";
+    //     let resp = is_prod_alive(url);
+    //     let res = tokio_test::block_on(resp);
 
-        assert!(res.success == true)
-    }
+    //     assert!(res.success == true)
+    // }
 
-    #[test]
-    fn is_prod_alive_test_fail() {
-        let url = "http://localhost2:3000/user/login";
-        let resp = is_prod_alive(url);
-        let res = tokio_test::block_on(resp);
+    // #[test]
+    // fn is_prod_alive_test_fail() {
+    //     let url = "http://localhost2:3000/user/login";
+    //     let resp = is_prod_alive(url);
+    //     let res = tokio_test::block_on(resp);
 
-        assert!(res.success == false)
-    }
+    //     assert!(res.success == false)
+    // }
 }

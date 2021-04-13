@@ -1,4 +1,6 @@
+use crate::alert;
 use crate::services::user_service::LoginResp;
+use crate::PROD_TEST_URL;
 use reqwest::Client;
 
 use serde::{Deserialize, Serialize};
@@ -26,7 +28,12 @@ pub async fn db_new_food(url: &str, eemail: &str, pw: &str, req: &NewFood) -> Lo
     let rtn = LoginResp { success: false };
 
     let client = Client::new();
-
+    // let resp = client.get(PROD_TEST_URL).send().await;
+    // match resp {
+    //     Ok(_res) => {}
+    //     Err(_e) => {}
+    // }
+    // alert("stop");
     let mut creds = String::from(eemail);
     creds.push_str(":");
     creds.push_str(pw);
@@ -39,7 +46,7 @@ pub async fn db_new_food(url: &str, eemail: &str, pw: &str, req: &NewFood) -> Lo
         .header("Authorization", b64creds)
         .send()
         .await;
-
+    // alert("stop");
     match resp {
         Ok(res) => {
             if res.status() == 200 {
@@ -49,6 +56,7 @@ pub async fn db_new_food(url: &str, eemail: &str, pw: &str, req: &NewFood) -> Lo
             }
         }
         Err(e) => {
+            // alert(&e.to_string());
             println!("Request err ! {:?}", e);
         }
     }
