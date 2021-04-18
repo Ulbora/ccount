@@ -1,6 +1,5 @@
 extern crate base64;
 
-use crate::alert;
 use reqwest::Client;
 
 use serde::{Deserialize, Serialize};
@@ -23,28 +22,6 @@ struct ChangePwReq {
 pub struct LoginResp {
     pub success: bool,
 }
-
-// pub async fn is_prod_alive(url: &str) -> LoginResp {
-//     let rtn = LoginResp { success: false };
-//     let client = Client::new();
-//     alert(url);
-//     let resp = client.get(url).send().await;
-//     match resp {
-//         Ok(res) => {
-//             //alert(&res.status().to_string());
-//             if res.status() == 200 {
-//                 println!("Response! {:?}", res);
-//                 let rtns = LoginResp { success: true };
-//                 return rtns;
-//             }
-//         }
-//         Err(e) => {
-//             println!("Request err ! {:?}", e);
-//         }
-//     }
-
-//     rtn
-// }
 
 pub async fn login_user(url: &str, eemail: &str, pw: &str) -> LoginResp {
     let rtn = LoginResp { success: false };

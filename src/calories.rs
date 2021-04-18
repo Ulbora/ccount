@@ -1,4 +1,3 @@
-use crate::alert;
 use crate::getCalDateValue;
 use crate::getCalariesAddDate;
 use crate::getCalariesIdToAdd;
@@ -112,7 +111,7 @@ pub async fn food_calory_screen() {
     html.push_str("</select>");
     html.push_str("</div>");
     html.push_str(
-        "<button onclick=\"addCaloriesByCategoryScreen();\" class=\"btn btn-primary\">Add Calories</button>",
+        "<input type=\"button\" onclick=\"addCaloriesByCategoryScreen();\" class=\"btn btn-primary\" value=\"Add Calories\">",
     );
     html.push_str("</form>");
     html.push_str("</div>");
@@ -244,12 +243,12 @@ pub async fn add_calory_screen() {
                 html.push_str("</td>");
                 html.push_str("<td>");
                 html.push_str(
-                    "<button type=\"button\" class=\"btn btn-success\" onclick=\"addCaloriesForDay('",
+                    "<input type=\"button\" class=\"btn btn-success\" onclick=\"addCaloriesForDay('",
                 );
                 html.push_str(&f.id.to_string());
                 html.push_str("','");
                 html.push_str(&sdate);
-                html.push_str("');\" >+</button>");
+                html.push_str("');\" value=\"+\" >");
                 html.push_str("</td>");
 
                 html.push_str("</tr>");
@@ -282,12 +281,12 @@ pub async fn add_calory_screen() {
                 html.push_str("</td>");
                 html.push_str("<td>");
                 html.push_str(
-                    "<button type=\"button\" class=\"btn btn-danger\" onclick=\"remCaloriesForDay('",
+                    "<input type=\"button\" class=\"btn btn-danger\" onclick=\"remCaloriesForDay('",
                 );
                 html.push_str(&c.id.to_string());
                 html.push_str("','");
                 html.push_str(&sdate);
-                html.push_str("');\" >-</button>");
+                html.push_str("');\" value=\"-\" >");
                 html.push_str("</td>");
                 html.push_str("</tr>");
                 cal_total += &fmap[&c.food_id].calories;
@@ -418,12 +417,12 @@ pub async fn add_calory_screen2() {
 
             html.push_str("<td>");
             html.push_str(
-                "<button type=\"button\" class=\"btn btn-success\" onclick=\"addCaloriesForDay('",
+                "<input type=\"button\" class=\"btn btn-success\" onclick=\"addCaloriesForDay('",
             );
             html.push_str(&f.id.to_string());
             html.push_str("','");
             html.push_str(&sdate);
-            html.push_str("');\" >+</button>");
+            html.push_str("');\" value=\"+\" >");
             html.push_str("</td>");
 
             html.push_str("</tr>");
@@ -456,12 +455,12 @@ pub async fn add_calory_screen2() {
             html.push_str("</td>");
             html.push_str("<td>");
             html.push_str(
-                "<button type=\"button\" class=\"btn btn-danger\" onclick=\"remCaloriesForDay('",
+                "<input type=\"button\" class=\"btn btn-danger\" onclick=\"remCaloriesForDay('",
             );
             html.push_str(&c.id.to_string());
             html.push_str("','");
             html.push_str(&sdate);
-            html.push_str("');\" >-</button>");
+            html.push_str("');\" value=\"-\">");
             html.push_str("</td>");
             html.push_str("</tr>");
             cal_total += &fmap[&c.food_id].calories;

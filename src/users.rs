@@ -37,7 +37,7 @@ pub fn login() {
         "<input name=\"password\" type=\"password\" class=\"form-control\" id=\"password\">",
     );
     html.push_str("</div>");
-    html.push_str("<button onclick=\"loginUser();\" class=\"btn btn-primary\">Submit</button>");
+    html.push_str("<input type=\"button\" onclick=\"loginUser();\" class=\"btn btn-primary\" value=\"Submit\" >");
     html.push_str("</div>");
     html.push_str("<nav class=\"nav\">");
     html.push_str(
@@ -126,7 +126,7 @@ pub fn change_pw_screen() {
         "<input name=\"newPassword\" type=\"password\" class=\"form-control\" id=\"newPassword2\">",
     );
     html.push_str("</div>");
-    html.push_str("<button onclick=\"changePassword()\" class=\"btn btn-primary\">Submit</button>");
+    html.push_str("<input type=\"button\" onclick=\"changePassword()\" class=\"btn btn-primary\" value=\"Submit\" >");
     html.push_str("</div>");
     html.push_str("</div>");
 
@@ -166,7 +166,7 @@ pub fn change_pw_screen_pw_no_match() {
         "<input name=\"newPassword\" type=\"password\" class=\"form-control\" id=\"newPassword2\">",
     );
     html.push_str("</div>");
-    html.push_str("<button onclick=\"changePassword()\" class=\"btn btn-primary\">Submit</button>");
+    html.push_str("<input type=\"button\" onclick=\"changePassword()\" class=\"btn btn-primary\" value=\"Submit\" >");
     html.push_str("<div id=\"pwnotMatch\" class=\"alert alert-danger mt-4\" role=\"alert\">");
     html.push_str("Passwords didn't match!");
     html.push_str("</div>");
@@ -243,7 +243,7 @@ pub fn register_screen() {
     html.push_str("<label for=\"regnewPassword\">Confirm</label>");
     html.push_str("<input name=\"regnewPassword\" type=\"password\" class=\"form-control\" id=\"regnewPassword2\">");
     html.push_str("</div>");
-    html.push_str("<button onclick=\"registerUser()\" class=\"btn btn-primary\">Submit</button>");
+    html.push_str("<input type=\"button\"  onclick=\"registerUser()\" class=\"btn btn-primary\" value=\"Submit\" >");
     html.push_str("</div>");
     html.push_str("</div>");
 
@@ -277,7 +277,7 @@ pub fn register_screen_pw_mismatch() {
     html.push_str("<label for=\"regnewPassword\">Confirm</label>");
     html.push_str("<input name=\"regnewPassword\" type=\"password\" class=\"form-control\" id=\"regnewPassword2\">");
     html.push_str("</div>");
-    html.push_str("<button onclick=\"registerUser()\" class=\"btn btn-primary\">Submit</button>");
+    html.push_str("<input type=\"button\" onclick=\"registerUser()\" class=\"btn btn-primary\" value=\"Submit\" >");
     html.push_str("<div id=\"regpwnotMatch\" class=\"alert alert-danger mt-4\" role=\"alert\">");
     html.push_str("Passwords didn't match!");
     html.push_str("</div>");
@@ -314,7 +314,7 @@ pub fn register_screen_dup() {
     html.push_str("<label for=\"regnewPassword\">Confirm</label>");
     html.push_str("<input name=\"regnewPassword\" type=\"password\" class=\"form-control\" id=\"regnewPassword2\">");
     html.push_str("</div>");
-    html.push_str("<button onclick=\"registerUser()\" class=\"btn btn-primary\">Submit</button>");
+    html.push_str("<input type=\"button\" onclick=\"registerUser()\" class=\"btn btn-primary\" value=\"Submit\" >");
     html.push_str("<div id=\"regUserExist\" class=\"alert alert-danger mt-4\" role=\"alert\">");
     html.push_str("The user already exists!");
     html.push_str("</div>");

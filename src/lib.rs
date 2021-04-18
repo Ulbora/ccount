@@ -1,5 +1,5 @@
 use crate::calories::get_calories_by_day;
-use reqwest::Client;
+
 use wasm_bindgen::prelude::*;
 
 pub mod calories;
@@ -11,7 +11,7 @@ pub mod users;
 
 const PROD_BASE_URL: &str = "http://ccount.cocka2notes.com";
 
-const PROD_TEST_URL: &str = "http://ccount.cocka2notes.com/alive";
+// const PROD_TEST_URL: &str = "http://ccount.cocka2notes.com/alive";
 
 // const PROD_BASE_URL: &str = "http://localhost:3000";
 

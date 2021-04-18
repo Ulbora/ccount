@@ -1,4 +1,3 @@
-use crate::alert;
 use crate::getSavedFoodId;
 use crate::getSavedFoodName;
 use crate::getSevedFoodCals;
@@ -63,15 +62,15 @@ pub async fn food_screen() {
     html.push_str("</div>");
     html.push_str("<div class=\"form-group\">");
     html.push_str("<label for=\"food\">Food</label>");
-    html.push_str(
-        "<input type=\"text\" class=\"form-control\" id=\"food\" placeholder=\"steak 10oz\">",
-    );
+    html.push_str("<input class=\"form-control\" id=\"food\" placeholder=\"steak 10oz\">");
     html.push_str("</div>");
     html.push_str("<div class=\"form-group\">");
     html.push_str("<label for=\"cals\">Calories</label>");
     html.push_str("<input type=\"number\" class=\"form-control\" id=\"cals\" placeholder=\"344\">");
     html.push_str("</div>");
-    html.push_str("<button onclick=\"addFood();\" class=\"btn btn-primary\">Add</button>");
+    html.push_str(
+        "<input type=\"button\" onclick=\"addFood();\" class=\"btn btn-primary\" value=\"Add\">",
+    );
     html.push_str("</form>");
     html.push_str("</div>");
 
@@ -188,7 +187,7 @@ pub async fn food_item_screen() {
     let mut html = String::from("<div id=\"foodItemScreen\" class=\"container-sm mt-5\">");
     html.push_str("<div class=\"shadow-none p-3 mb-5 mt-5 rounded\">");
     html.push_str(
-        "<button onclick=\"deleteFood();\" class=\"btn btn-danger mb-2\">Delete</button>",
+        "<input type=\"button\" onclick=\"deleteFood();\" class=\"btn btn-danger mb-2\" value=\"Delete\">",
     );
     html.push_str("<h1>Food</h1>");
     html.push_str("<form>");
@@ -207,7 +206,7 @@ pub async fn food_item_screen() {
     html.push_str(&fcals);
     html.push_str("\">");
     html.push_str("</div>");
-    html.push_str("<button onclick=\"updateFood();\" class=\"btn btn-primary\">Update</button>");
+    html.push_str("<input type=\"button\" onclick=\"updateFood();\" class=\"btn btn-primary\" value=\"Update\">");
     html.push_str("</form>");
     html.push_str("</div>");
     html.push_str("</div>");

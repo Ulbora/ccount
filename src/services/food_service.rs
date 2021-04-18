@@ -1,6 +1,5 @@
-use crate::alert;
 use crate::services::user_service::LoginResp;
-use crate::PROD_TEST_URL;
+
 use reqwest::Client;
 
 use serde::{Deserialize, Serialize};
