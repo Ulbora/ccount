@@ -234,7 +234,7 @@ mod tests {
         let pw = "ken";
         let rq = NewCalories {
             day: String::from("01-02-2021"),
-            food_id: 613,
+            food_id: 914,
             user_email: email.to_string(),
         };
         let resp = db_new_calories(url, email, pw, &rq);

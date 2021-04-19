@@ -11,23 +11,17 @@ use crate::services::food_service::delete_food;
 use crate::services::food_service::get_food_list_by_user;
 use crate::services::food_service::Food;
 use crate::services::food_service::NewFood;
-//use crate::services::user_service::is_prod_alive;
-//use crate::LOCAL_BASE_URL;
+
 use crate::PROD_BASE_URL;
-//use crate::PROD_TEST_URL;
+
 use std::collections::HashMap;
 use wasm_bindgen::prelude::*;
 use wasm_bindgen::JsCast;
 
 #[wasm_bindgen]
 pub async fn food_screen() {
-    //let pa = is_prod_alive(&PROD_TEST_URL).await;
-    //let mut url = String::from(LOCAL_BASE_URL);
-    //let mut fdurl = String::from(LOCAL_BASE_URL);
-    //if pa.success {
     let mut url = String::from(PROD_BASE_URL);
     let mut fdurl = String::from(PROD_BASE_URL);
-    //}
     url.push_str(&String::from("/category/list"));
     fdurl.push_str(&String::from("/food/list"));
 
@@ -115,12 +109,7 @@ pub async fn food_screen() {
 
 #[wasm_bindgen]
 pub async fn new_food() {
-    // let pa = is_prod_alive(&PROD_TEST_URL).await;
-    //let mut url = String::from(LOCAL_BASE_URL);
-    //alert(&pa.success.to_string());
-    //if pa.success {
     let mut url = String::from(PROD_BASE_URL);
-    // }
     url.push_str(&String::from("/food/new"));
     let window = web_sys::window().expect("no global `window` exists");
     let document = window.document().expect("should have a document on window");
@@ -146,9 +135,6 @@ pub async fn new_food() {
         .unwrap()
         .value();
 
-    //alert(&food);
-    //alert(&catval);
-    // alert(&cals);
     if !food.eq("") && !catval.eq("") && !cals.eq("") {
         let cat_id = catval.parse::<i64>().unwrap();
         let calsint = cals.parse::<i32>().unwrap();
@@ -161,12 +147,10 @@ pub async fn new_food() {
             user_email: uemail,
         };
         let uemail = getUserEmail();
-        //alert(&url);
         let res = db_new_food(&url, &uemail, &epw, &req).await;
         if res.success {
             food_screen().await;
         } else {
-            //alert("Food add error!");
             food_screen().await;
         }
     }
@@ -218,11 +202,7 @@ pub async fn food_item_screen() {
 
 #[wasm_bindgen]
 pub async fn update_food() {
-    //let pa = is_prod_alive(&PROD_TEST_URL).await;
-    //let mut url = String::from(LOCAL_BASE_URL);
-    //if pa.success {
     let mut url = String::from(PROD_BASE_URL);
-    // }
     url.push_str(&String::from("/food/update"));
     let window = web_sys::window().expect("no global `window` exists");
     let document = window.document().expect("should have a document on window");
@@ -267,7 +247,6 @@ pub async fn update_food() {
         if res.success {
             food_screen().await;
         } else {
-            // alert("Food update error!");
             food_screen().await;
         }
     } else {
@@ -280,11 +259,7 @@ pub async fn del_food() {
     let fid = getSavedFoodId();
     let uemail = getUserEmail();
     let epw = getUserPw();
-    // let pa = is_prod_alive(&PROD_TEST_URL).await;
-    // let mut url = String::from(LOCAL_BASE_URL);
-    //if pa.success {
     let mut url = String::from(PROD_BASE_URL);
-    // }
     url.push_str(&String::from("/food"));
 
     let fidint = fid.parse::<i64>().unwrap();
@@ -293,7 +268,6 @@ pub async fn del_food() {
     if res.success {
         food_screen().await;
     } else {
-        //alert("Food update error!");
         food_screen().await;
     }
 }
